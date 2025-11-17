@@ -11,3 +11,4 @@ public class ReceiptDiscount extends Discount {
     }
 }
 
+
