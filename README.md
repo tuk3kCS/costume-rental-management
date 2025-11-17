@@ -1,1 +1,1 @@
-# costume_rental_management
+# costume-rental-management
