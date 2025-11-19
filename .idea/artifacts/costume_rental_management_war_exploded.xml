@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="costume-rental-management:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/costume_rental_management_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="costume-rental-management" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql-connector-java-8.0.30" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="costume-rental-management/web/Web" />
+    </root>
+  </artifact>
+</component>
