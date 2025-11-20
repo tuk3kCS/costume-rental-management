@@ -8,9 +8,8 @@
 </head>
 <body>
 <%  
-    User user = (User) session.getAttribute("user");
-    String username = user.getUsername();
-    if (username == null){
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
         response.sendRedirect("login.jsp?err=timeout");
         return;
     }
@@ -22,7 +21,7 @@
 <br><br>
 
 <form name="searchForm" action="doSearchProvider.jsp" method="post">
-    <input type="text" name="keyword" id="keyword" placeholder="A" size="50" />
+    <input type="text" name="keyword" id="keyword" size="50" />
     <input type="submit" value="Tìm kiếm" />
 </form>
 

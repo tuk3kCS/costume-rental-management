@@ -18,7 +18,8 @@
     boolean kq = dao.checkLogin(user);
 
     if (kq) {
-        session.setAttribute("user", user);
+        Staff staff = new StaffDAO().getStaffInfor(username);
+        session.setAttribute("staff", staff);
         response.sendRedirect("homepage.jsp");
     }
     

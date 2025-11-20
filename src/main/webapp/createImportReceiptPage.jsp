@@ -8,40 +8,66 @@
 </head>
 <body>
 <%
-    User user = (User) session.getAttribute("user");
-    if (user == null){
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
         response.sendRedirect("login.jsp?err=timeout");
         return;
     }
     
-    // Tạo Receipt object khi vào trang lần đầu
     Receipt receipt = (Receipt) session.getAttribute("currentReceipt");
     if (receipt == null || request.getParameter("new") != null) {
         receipt = new Receipt();
         receipt.setCreatedDate(new java.util.Date());
-        
-        Staff staff = new Staff();
-        staff.setId(user.getId());
-        staff.setUsername(user.getUsername());
-        staff.setFullName(user.getFullName());
         receipt.setStaff(staff);
         
         receipt.setProducts(new ArrayList<ReceiptProduct>());
         session.setAttribute("currentReceipt", receipt);
     }
     
-    // Lấy danh sách provider và product để hiển thị trong dropdown
     ProviderDAO providerDAO = new ProviderDAO();
     ProductDAO productDAO = new ProductDAO();
     List<Provider> providers = providerDAO.getProviderList();
-    List<Product> products = productDAO.getProductList();
+    
+    // Xử lý khi chọn nhà cung cấp từ dropdown
+    String providerIdParam = request.getParameter("providerId");
+    if (providerIdParam != null && !providerIdParam.isEmpty()) {
+        int providerId = Integer.parseInt(providerIdParam);
+        
+        // Kiểm tra xem provider có thay đổi không
+        boolean providerChanged = (receipt.getProvider() == null || receipt.getProvider().getId() != providerId);
+        
+        if (providerChanged) {
+            // Tạo receipt mới khi thay đổi nhà cung cấp
+            Receipt newReceipt = new Receipt();
+            newReceipt.setCreatedDate(receipt.getCreatedDate());
+            newReceipt.setStaff(receipt.getStaff());
+            newReceipt.setProducts(new ArrayList<ReceiptProduct>());
+            
+            // Set provider mới
+            for (Provider p : providers) {
+                if (p.getId() == providerId) {
+                    newReceipt.setProvider(p);
+                    break;
+                }
+            }
+            
+            // Xóa receipt cũ và lưu receipt mới vào session
+            receipt = newReceipt;
+            session.setAttribute("currentReceipt", receipt);
+        }
+    }
+    
+    // Lấy danh sách sản phẩm theo nhà cung cấp đã chọn
+    List<ProviderProduct> providerProducts = new ArrayList<ProviderProduct>();
+    if (receipt.getProvider() != null) {
+        providerProducts = productDAO.getProductList(receipt.getProvider().getId());
+    }
 %>
 
 <h2>Tạo phiếu nhập mới</h2>
 <button onclick="location.href='productImportPage.jsp'" style="float: right;">Quay lại</button>
 <br><br>
 
-<!-- Form chọn nhà cung cấp -->
 <form name="selectProviderForm" method="post">
     Nhà cung cấp
     <select name="providerId" id="providerId" onchange="this.form.submit()">
@@ -58,60 +84,58 @@
     <button type="button" onclick="location.href='addProviderPage.jsp?from=createImportReceiptPage.jsp'">Thêm nhà cung cấp</button>
 </form>
 
-<%
-    // Xử lý chọn provider
-    String providerIdParam = request.getParameter("providerId");
-    if (providerIdParam != null && !providerIdParam.isEmpty()) {
-        int providerId = Integer.parseInt(providerIdParam);
-        for (Provider p : providers) {
-            if (p.getId() == providerId) {
-                receipt.setProvider(p);
-                session.setAttribute("currentReceipt", receipt);
-                break;
-            }
-        }
-    }
-%>
-
 <br>
 
-<!-- Form chọn mặt hàng và nhập số lượng -->
 <form name="addProductForm" method="post">
     Mặt hàng
-    <select name="productId" id="productId">
+    <select name="providerProductId" id="providerProductId" <%= (receipt.getProvider() == null ? "disabled" : "") %>>
         <option value="">-- Chọn mặt hàng --</option>
         <%
-            for (Product prod : products) {
+            for (ProviderProduct pp : providerProducts) {
         %>
-        <option value="<%= prod.getId() %>"><%= prod.getName() %> - <%= prod.getSize() %> - <%= prod.getColor() %></option>
+        <option value="<%= pp.getId() %>"><%= pp.getProduct().getName() %> - <%= pp.getProduct().getSize() %> - <%= pp.getProduct().getColor() %> (Giá: <%= pp.getUnitPrice() %>)</option>
         <%
             }
         %>
     </select>
     Số lượng
-    <input type="number" name="quantity" id="quantity" min="1" value="1" />
-    <button type="submit" name="action" value="addProduct">Nhập thêm</button>
+    <input type="number" name="quantity" id="quantity" min="1" value="1" <%= (receipt.getProvider() == null ? "disabled" : "") %> />
+    <button type="submit" name="action" value="addProduct" <%= (receipt.getProvider() == null ? "disabled" : "") %>>Nhập thêm</button>
     <button type="button" onclick="location.href='addProductPage.jsp?from=createImportReceiptPage.jsp'">Thêm mặt hàng chưa có trong DS</button>
 </form>
 
 <%
-    // Xử lý thêm sản phẩm vào receipt
     String action = request.getParameter("action");
     if ("addProduct".equals(action)) {
-        String productIdParam = request.getParameter("productId");
+        String providerProductIdParam = request.getParameter("providerProductId");
         String quantityParam = request.getParameter("quantity");
         
-        if (productIdParam != null && !productIdParam.isEmpty() && quantityParam != null) {
-            int productId = Integer.parseInt(productIdParam);
+        if (providerProductIdParam != null && !providerProductIdParam.isEmpty() && quantityParam != null) {
+            int providerProductId = Integer.parseInt(providerProductIdParam);
             int quantity = Integer.parseInt(quantityParam);
             
-            for (Product prod : products) {
-                if (prod.getId() == productId) {
-                    ReceiptProduct rp = new ReceiptProduct();
-                    rp.setProduct(prod);
-                    rp.setQuantity(quantity);
-                    rp.setUnitPrice(100000); // Giá mặc định, có thể lấy từ database
-                    receipt.getProducts().add(rp);
+            for (ProviderProduct pp : providerProducts) {
+                if (pp.getId() == providerProductId) {
+                    // Kiểm tra xem product đã tồn tại trong danh sách chưa
+                    boolean productExists = false;
+                    for (ReceiptProduct rp : receipt.getProducts()) {
+                        if (rp.getProduct().getId() == pp.getProduct().getId()) {
+                            // Nếu đã tồn tại, chỉ cần tăng số lượng
+                            rp.setQuantity(rp.getQuantity() + quantity);
+                            productExists = true;
+                            break;
+                        }
+                    }
+                    
+                    // Nếu chưa tồn tại, thêm mới vào danh sách
+                    if (!productExists) {
+                        ReceiptProduct rp = new ReceiptProduct();
+                        rp.setProduct(pp.getProduct());
+                        rp.setQuantity(quantity);
+                        rp.setUnitPrice(pp.getUnitPrice());
+                        receipt.getProducts().add(rp);
+                    }
+                    
                     session.setAttribute("currentReceipt", receipt);
                     break;
                 }
@@ -119,7 +143,6 @@
         }
     }
     
-    // Xử lý xóa sản phẩm
     if ("removeProduct".equals(action)) {
         String indexParam = request.getParameter("index");
         if (indexParam != null) {
@@ -132,13 +155,15 @@
 
 <br>
 
-<!-- Hiển thị thông tin nhân viên nhập và nhà cung cấp -->
 Nhân viên nhập: <%= receipt.getStaff() != null ? receipt.getStaff().getFullName() : "" %><br>
 Nhà cung cấp: <%= receipt.getProvider() != null ? receipt.getProvider().getName() : "" %><br>
 Danh sách mặt hàng:<br>
 
-<!-- Bảng danh sách sản phẩm -->
 <%
+    int totalAmount = 0;
+    int totalDiscount = 0;
+    int finalTotal = 0;
+    
     if (receipt.getProducts() != null && receipt.getProducts().size() > 0) {
 %>
 <table border="1">
@@ -153,19 +178,12 @@ Danh sách mặt hàng:<br>
         <th>Tùy chọn</th>
     </tr>
     <%
-        int totalAmount = 0;
-        int totalDiscount = 0;
         for (int i = 0; i < receipt.getProducts().size(); i++) {
             ReceiptProduct rp = receipt.getProducts().get(i);
             int subtotal = rp.getUnitPrice() * rp.getQuantity();
             totalAmount += subtotal;
             
-            // Tính chiết khấu cho sản phẩm này nếu có
             int productDiscount = 0;
-            if (receipt.getDiscount() != null && receipt.getDiscount() instanceof ProductDiscount) {
-                // Kiểm tra xem discount có áp dụng cho product này không
-                // Logic này sẽ được xử lý trong doSearchDiscount.jsp
-            }
             totalDiscount += productDiscount;
     %>
     <tr>
@@ -187,14 +205,13 @@ Danh sách mặt hàng:<br>
     <%
         }
         
-        // Tính chiết khấu receipt nếu có
         int receiptDiscount = 0;
         if (receipt.getDiscount() != null && receipt.getDiscount() instanceof ReceiptDiscount) {
             receiptDiscount = receipt.getDiscount().getAmount();
             totalDiscount += receiptDiscount;
         }
         
-        int finalTotal = totalAmount - totalDiscount;
+        finalTotal = totalAmount - totalDiscount;
     %>
 </table>
 <%
@@ -207,23 +224,20 @@ Danh sách mặt hàng:<br>
 
 <br>
 
-<!-- Form nhập mã chiết khấu -->
 <form name="discountForm" action="doSearchDiscount.jsp" method="post">
     Mã chiết khấu
     <input type="text" name="discountCode" id="discountCode" />
-    <button type="button" onclick="location.href='addDiscountPage.jsp'">Thêm mã chiết khấu</button>
     <button type="submit">Áp dụng</button>
+    <button type="button" onclick="location.href='addDiscountPage.jsp'">Thêm mã chiết khấu</button>
 </form>
 
 <br>
 
-<!-- Hiển thị tổng tiền -->
 Tổng chiết khấu: <%= totalDiscount %><br>
 Tổng tiền: <%= finalTotal %><br>
 
 <br>
 
-<!-- Nút Lưu và Hủy -->
 <form action="doSaveReceipt.jsp" method="post">
     <button type="submit">Lưu</button>
     <button type="button" onclick="if(confirm('Hủy tạo phiếu nhập?')) location.href='productImportPage.jsp'">Hủy</button>

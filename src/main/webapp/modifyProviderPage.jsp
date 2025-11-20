@@ -8,13 +8,12 @@
 </head>
 <body>
 <%
-    User user = (User) session.getAttribute("user");
-    String username = user.getUsername();
-    if (username == null){
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
         response.sendRedirect("login.jsp?err=timeout");
         return;
     }
-
+    
     String idParam = request.getParameter("id");
     if (idParam == null || idParam.isEmpty()) {
         response.sendRedirect("providerManagementPage.jsp");

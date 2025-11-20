@@ -8,23 +8,28 @@
 </head>
 <body>
 <%
-    User user = (User) session.getAttribute("user");
-    if (user == null){
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
         response.sendRedirect("login.jsp?err=timeout");
         return;
     }
     
-    // Nhận tham số from để biết trang gọi
     String from = request.getParameter("from");
     if (from == null || from.isEmpty()) {
         from = "createImportReceiptPage.jsp";
     }
     
-    // Lấy danh sách provider và product để hiển thị trong dropdown
     ProviderDAO providerDAO = new ProviderDAO();
     ProductDAO productDAO = new ProductDAO();
     List<Provider> providers = providerDAO.getProviderList();
-    List<Product> products = productDAO.getProductList();
+    List<ProviderProduct> providerProducts = new ArrayList<ProviderProduct>();
+    
+    // Lấy provider ID đã chọn
+    String selectedProviderId = request.getParameter("providerId");
+    if (selectedProviderId != null && !selectedProviderId.isEmpty()) {
+        int providerId = Integer.parseInt(selectedProviderId);
+        providerProducts = productDAO.getProductList(providerId);
+    }
 %>
 
 <h2>Thêm mã chiết khấu</h2>
@@ -33,16 +38,18 @@
 
 <form name="addDiscountForm" action="doSaveDiscount.jsp" method="post">
     <input type="hidden" name="from" value="<%= from %>" />
+    <input type="hidden" name="returnProviderId" value="<%= selectedProviderId != null ? selectedProviderId : "" %>" />
     <table border="0">
         <tr>
             <td>Nhà cung cấp</td>
             <td>
-                <select name="providerId" id="providerId" required>
+                <select name="providerId" id="providerId" onchange="this.form.action='addDiscountPage.jsp'; this.form.submit();" required>
                     <option value="">-- Chọn nhà cung cấp --</option>
                     <%
                         for (Provider p : providers) {
+                            String selected = (selectedProviderId != null && p.getId() == Integer.parseInt(selectedProviderId)) ? "selected" : "";
                     %>
-                    <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                    <option value="<%= p.getId() %>" <%= selected %>><%= p.getName() %></option>
                     <%
                         }
                     %>
@@ -60,12 +67,12 @@
         <tr>
             <td>Mặt hàng</td>
             <td>
-                <select name="productId" id="productId">
+                <select name="productId" id="productId" <%= (selectedProviderId == null || selectedProviderId.isEmpty() ? "disabled" : "") %>>
                     <option value="">-- Không chọn (áp dụng cho toàn phiếu) --</option>
                     <%
-                        for (Product prod : products) {
+                        for (ProviderProduct pp : providerProducts) {
                     %>
-                    <option value="<%= prod.getId() %>"><%= prod.getName() %> - <%= prod.getSize() %> - <%= prod.getColor() %></option>
+                    <option value="<%= pp.getProduct().getId() %>"><%= pp.getProduct().getName() %> - <%= pp.getProduct().getSize() %> - <%= pp.getProduct().getColor() %> (Giá: <%= pp.getUnitPrice() %>)</option>
                     <%
                         }
                     %>

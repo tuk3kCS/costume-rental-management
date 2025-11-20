@@ -1,20 +1,24 @@
 package model;
 
+import java.util.List;
+
 public class Provider {
     private int id;
     private String name;
     private String address;
     private String phoneNo;
     private String email;
+    private List<Discount> discounts;
 
     public Provider() {}
 
-    public Provider(int id, String name, String address, String phoneNo, String email) {
+    public Provider(int id, String name, String address, String phoneNo, String email, List<Discount> discounts) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.phoneNo = phoneNo;
         this.email = email;
+        this.discounts = discounts;
     }
 
     public int getId() {
@@ -55,6 +59,14 @@ public class Provider {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(List<Discount> discounts) {
+        this.discounts = discounts;
     }
 }
 

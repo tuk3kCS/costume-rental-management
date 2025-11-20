@@ -8,14 +8,12 @@
 </head>
 <body>
 <%
-    User user = (User) session.getAttribute("user");
-    String username = user.getUsername();
-    if (username == null){
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
         response.sendRedirect("login.jsp?err=timeout");
-        return;
+        return;  
     }
     
-    // Nhận tham số from để biết trang gọi
     String from = request.getParameter("from");
     if (from == null || from.isEmpty()) {
         from = "providerManagementPage.jsp";
@@ -36,12 +34,12 @@
             <td><input type="text" name="address" id="address" required /></td>
         </tr>
         <tr>
-            <td>Số ĐT:</td>
-            <td><input type="text" name="phoneNo" id="phoneNo" required /></td>
-        </tr>
-        <tr>
             <td>Email:</td>
             <td><input type="email" name="email" id="email" required /></td>
+        </tr>
+        <tr>
+            <td>Số ĐT:</td>
+            <td><input type="text" name="phoneNo" id="phoneNo" required /></td>
         </tr>
         <tr>
             <td></td>

@@ -16,20 +16,30 @@
         String providerIdParam = request.getParameter("providerId");
         String from = request.getParameter("from");
         
-        // Xác định trang trở về
         if (from == null || from.isEmpty()) {
             from = "createImportReceiptPage.jsp";
         }
         
-        // Tạo Product object
+        // Tạo đối tượng Product
         Product product = new Product();
         product.setName(name);
         product.setSize(size);
         product.setColor(color);
         
-        // Lưu product
-        ProductDAO dao = new ProductDAO();
-        boolean result = dao.saveProduct(product);
+        // Lấy đối tượng Provider từ database
+        int providerId = Integer.parseInt(providerIdParam);
+        ProviderDAO providerDAO = new ProviderDAO();
+        Provider provider = providerDAO.getProviderById(providerId);
+        
+        // Tạo đối tượng ProviderProduct
+        ProviderProduct providerProduct = new ProviderProduct();
+        providerProduct.setProduct(product);
+        providerProduct.setProvider(provider);
+        providerProduct.setUnitPrice(Integer.parseInt(unitPriceParam));
+        
+        // Lưu vào database
+        ProductDAO productDAO = new ProductDAO();
+        boolean result = productDAO.saveProduct(providerProduct);
         
         if (result) {
 %>

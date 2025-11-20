@@ -10,7 +10,7 @@ public class StaffDAO extends DAO {
 
     public Staff getStaffInfor(String username) throws Exception {
         {
-            String sql = "SELECT * FROM staff WHERE username = ?";
+            String sql = "SELECT * FROM tblUser WHERE username = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();

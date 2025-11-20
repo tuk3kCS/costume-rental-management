@@ -8,6 +8,12 @@
 </head>
 <body>
 <%
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
+        response.sendRedirect("login.jsp?err=timeout");
+        return;
+    }
+    
     try {
         String idParam = request.getParameter("id");
         String name = request.getParameter("name");
@@ -16,7 +22,6 @@
         String email = request.getParameter("email");
         String from = request.getParameter("from");
         
-        // Xác định trang trở về
         if (from == null || from.isEmpty()) {
             from = "providerManagementPage.jsp";
         }

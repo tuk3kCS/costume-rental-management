@@ -8,15 +8,15 @@
 </head>
 <body>
 <%
-    User user = (User) session.getAttribute("user");
-    String username = user.getUsername();
+    Staff staff = (Staff) session.getAttribute("staff");
+    String username = staff.getUsername();
     if (username == null){
         response.sendRedirect("login.jsp?err=timeout");
         return;
     }
     
-    String fullname = user.getFullName();
-    String role = user.getRole();
+    String fullname = staff.getFullName();
+    String role = staff.getRole();
 %>
 
 <h1>Quản lý hệ thống cho thuê trang phục</h1>
@@ -36,7 +36,7 @@
                     }
                 %>
                 <tr>
-                    <td><a href="productImportPage.jsp">Nhập trang phục về từ nhà cung cấp</a></td>
+                    <td><a href="productImportPage.jsp">Nhập trang phục về từ nhà cung cấp</    a></td>
                 </tr>
                 <%
                     if (role != null && role.equalsIgnoreCase("manager")) {

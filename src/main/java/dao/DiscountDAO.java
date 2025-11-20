@@ -10,17 +10,17 @@ public class DiscountDAO extends DAO {
         super();
     }
     
-    public boolean saveDiscount(Discount discount, Integer productId) throws Exception {
+    public boolean saveDiscount(Discount discount, int providerId, Integer productId) throws Exception {
         try {
             // Bắt đầu transaction
             con.setAutoCommit(false);
             
             // Insert vào tblDiscount
-            String sqlDiscount = "INSERT INTO tblDiscount (discountCode, amount, provider) VALUES (?, ?, ?)";
+            String sqlDiscount = "INSERT INTO tblDiscount (discountCode, amount, tblProviderId) VALUES (?, ?, ?)";
             PreparedStatement pstmtDiscount = con.prepareStatement(sqlDiscount, Statement.RETURN_GENERATED_KEYS);
             pstmtDiscount.setString(1, discount.getDiscountCode());
             pstmtDiscount.setInt(2, discount.getAmount());
-            pstmtDiscount.setString(3, discount.getProvider());
+            pstmtDiscount.setInt(3, providerId);
             
             int result = pstmtDiscount.executeUpdate();
             
@@ -35,14 +35,14 @@ public class DiscountDAO extends DAO {
                 // Kiểm tra có productId hay không
                 if (productId != null && productId > 0) {
                     // Có productId -> Insert vào tblProductDiscount
-                    String sqlProductDiscount = "INSERT INTO tblProductDiscount (discountId, productId) VALUES (?, ?)";
+                    String sqlProductDiscount = "INSERT INTO tblProductDiscount (tblDiscountId, tblProductId) VALUES (?, ?)";
                     PreparedStatement pstmtProductDiscount = con.prepareStatement(sqlProductDiscount);
                     pstmtProductDiscount.setInt(1, discountId);
                     pstmtProductDiscount.setInt(2, productId);
                     pstmtProductDiscount.executeUpdate();
                 } else {
                     // Không có productId -> Insert vào tblReceiptDiscount
-                    String sqlReceiptDiscount = "INSERT INTO tblReceiptDiscount (discountId) VALUES (?)";
+                    String sqlReceiptDiscount = "INSERT INTO tblReceiptDiscount (tblDiscountId) VALUES (?)";
                     PreparedStatement pstmtReceiptDiscount = con.prepareStatement(sqlReceiptDiscount);
                     pstmtReceiptDiscount.setInt(1, discountId);
                     pstmtReceiptDiscount.executeUpdate();
@@ -66,23 +66,24 @@ public class DiscountDAO extends DAO {
     }
 
     public Discount searchDiscount(String discountCode) throws Exception {
-        String sql = "SELECT d.*, p.id as productId FROM tblDiscount d " +
-                     "LEFT JOIN tblProduct p ON d.productId = p.id " +
+        String sql = "SELECT d.*, pd.tblProductId, rd.tblDiscountId as tblReceiptDiscountId " +
+                     "FROM tblDiscount d " +
+                     "LEFT JOIN tblProductDiscount pd ON d.id = pd.tblDiscountId " +
+                     "LEFT JOIN tblReceiptDiscount rd ON d.id = rd.tblDiscountId " +
                      "WHERE d.discountCode = ?";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1, discountCode);
         ResultSet rs = pstmt.executeQuery();
         
         if (rs.next()) {
-            int productId = rs.getInt("productId");
+            int productId = rs.getInt("tblProductId");
             
             if (productId > 0) {
                 // Đây là ProductDiscount
                 ProductDiscount discount = new ProductDiscount();
-                discount.setId(productId); // Lưu productId vào id để kiểm tra
+                discount.setId(rs.getInt("id"));
                 discount.setDiscountCode(rs.getString("discountCode"));
                 discount.setAmount(rs.getInt("amount"));
-                discount.setProvider(rs.getString("provider"));
                 return discount;
             } else {
                 // Đây là ReceiptDiscount
@@ -90,7 +91,6 @@ public class DiscountDAO extends DAO {
                 discount.setId(rs.getInt("id"));
                 discount.setDiscountCode(rs.getString("discountCode"));
                 discount.setAmount(rs.getInt("amount"));
-                discount.setProvider(rs.getString("provider"));
                 return discount;
             }
         }

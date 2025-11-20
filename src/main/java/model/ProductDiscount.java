@@ -6,8 +6,8 @@ public class ProductDiscount extends Discount {
         super();
     }
 
-    public ProductDiscount(int id, String discountCode, int amount, String provider) {
-        super(id, discountCode, amount, provider);
+    public ProductDiscount(int id, String discountCode, int amount) {
+        super(id, discountCode, amount);
     }
 }
 

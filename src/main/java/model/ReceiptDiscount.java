@@ -6,8 +6,8 @@ public class ReceiptDiscount extends Discount {
         super();
     }
 
-    public ReceiptDiscount(int id, String discountCode, int amount, String provider) {
-        super(id, discountCode, amount, provider);
+    public ReceiptDiscount(int id, String discountCode, int amount) {
+        super(id, discountCode, amount);
     }
 }
 

@@ -8,6 +8,12 @@
 </head>
 <body>
 <%
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
+        response.sendRedirect("login.jsp?err=timeout");
+        return;
+    }
+    
     try {
         Receipt receipt = (Receipt) session.getAttribute("currentReceipt");
         
@@ -21,7 +27,6 @@
             return;
         }
         
-        // Kiểm tra dữ liệu
         if (receipt.getProvider() == null) {
 %>
 <script type="text/javascript">
@@ -42,12 +47,10 @@
             return;
         }
         
-        // Lưu receipt vào database
         ReceiptDAO dao = new ReceiptDAO();
         boolean result = dao.saveReceipt(receipt);
         
         if (result) {
-            // Xóa receipt khỏi session sau khi lưu thành công
             session.removeAttribute("currentReceipt");
 %>
 <script type="text/javascript">

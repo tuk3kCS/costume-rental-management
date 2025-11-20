@@ -4,15 +4,13 @@ public class Discount {
     private int id;
     private String discountCode;
     private int amount;
-    private String provider;
 
     public Discount() {}
 
-    public Discount(int id, String discountCode, int amount, String provider) {
+    public Discount(int id, String discountCode, int amount) {
         this.id = id;
         this.discountCode = discountCode;
         this.amount = amount;
-        this.provider = provider;
     }
 
     public int getId() {
@@ -37,14 +35,6 @@ public class Discount {
 
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
     }
 }
 

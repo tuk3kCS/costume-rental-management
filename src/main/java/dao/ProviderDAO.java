@@ -11,7 +11,7 @@ public class ProviderDAO extends DAO {
 
     public List<Provider> searchProvider(String keyword) throws Exception {
         List<Provider> providerList = new ArrayList<>();
-        String sql = "SELECT * FROM tblprovider WHERE name LIKE ? OR address LIKE ? OR phoneNo LIKE ? OR email LIKE ?";
+        String sql = "SELECT * FROM tblProvider WHERE name LIKE ? OR address LIKE ? OR phoneNo LIKE ? OR email LIKE ?";
         PreparedStatement pstmt = con.prepareStatement(sql);
         String searchPattern = "%" + keyword + "%";
         pstmt.setString(1, searchPattern);
@@ -38,7 +38,7 @@ public class ProviderDAO extends DAO {
         PreparedStatement pstmt;
         
         if (provider.getId() > 0) {
-            sql = "UPDATE tblprovider SET name = ?, address = ?, phoneNo = ?, email = ? WHERE id = ?";
+            sql = "UPDATE tblProvider SET name = ?, address = ?, phoneNo = ?, email = ? WHERE id = ?";
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, provider.getName());
             pstmt.setString(2, provider.getAddress());
@@ -48,7 +48,7 @@ public class ProviderDAO extends DAO {
         }
         
         else {
-            sql = "INSERT INTO tblprovider (name, address, phoneNo, email) VALUES (?, ?, ?, ?)";
+            sql = "INSERT INTO tblProvider (name, address, phoneNo, email) VALUES (?, ?, ?, ?)";
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, provider.getName());
             pstmt.setString(2, provider.getAddress());
@@ -61,7 +61,7 @@ public class ProviderDAO extends DAO {
     }
 
     public boolean deleteProvider(Provider provider) throws Exception {
-        String sql = "DELETE FROM tblprovider WHERE id = ?";
+        String sql = "DELETE FROM tblProvider WHERE id = ?";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setInt(1, provider.getId());
         int result = pstmt.executeUpdate();
@@ -69,7 +69,7 @@ public class ProviderDAO extends DAO {
     }
 
     public Provider getProviderById(int id) throws Exception {
-        String sql = "SELECT * FROM tblprovider WHERE id = ?";
+        String sql = "SELECT * FROM tblProvider WHERE id = ?";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setInt(1, id);
         ResultSet rs = pstmt.executeQuery();
@@ -92,7 +92,7 @@ public class ProviderDAO extends DAO {
         PreparedStatement pstmt;
         
         if (provider.getId() > 0) {
-            sql = "SELECT * FROM tblprovider WHERE (email = ? OR phoneNo = ?) AND id != ?";
+            sql = "SELECT * FROM tblProvider WHERE (email = ? OR phoneNo = ?) AND id != ?";
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, provider.getEmail());
             pstmt.setString(2, provider.getPhoneNo());
@@ -100,7 +100,7 @@ public class ProviderDAO extends DAO {
         }
         
         else {
-            sql = "SELECT * FROM tblprovider WHERE email = ? OR phoneNo = ?";
+            sql = "SELECT * FROM tblProvider WHERE email = ? OR phoneNo = ?";
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, provider.getEmail());
             pstmt.setString(2, provider.getPhoneNo());
@@ -123,7 +123,7 @@ public class ProviderDAO extends DAO {
 
     public List<Provider> getProviderList() throws Exception {
         List<Provider> providerList = new ArrayList<>();
-        String sql = "SELECT * FROM tblprovider";
+        String sql = "SELECT * FROM tblProvider";
         PreparedStatement pstmt = con.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         

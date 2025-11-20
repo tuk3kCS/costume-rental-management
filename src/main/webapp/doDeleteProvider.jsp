@@ -8,6 +8,12 @@
 </head>
 <body>
 <%
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
+        response.sendRedirect("login.jsp?err=timeout");
+        return;
+    }
+    
     try {
         String idParam = request.getParameter("id");
         

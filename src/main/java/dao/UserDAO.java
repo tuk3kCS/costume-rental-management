@@ -10,7 +10,7 @@ public class UserDAO extends DAO {
 
     public boolean checkLogin(User user) throws Exception {
         {
-            String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+            String sql = "SELECT * FROM tblUser WHERE username = ? AND password = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());

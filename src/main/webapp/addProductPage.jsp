@@ -8,19 +8,17 @@
 </head>
 <body>
 <%
-    User user = (User) session.getAttribute("user");
-    if (user == null){
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (staff == null){
         response.sendRedirect("login.jsp?err=timeout");
         return;
     }
     
-    // Nhận tham số from để biết trang gọi
     String from = request.getParameter("from");
     if (from == null || from.isEmpty()) {
         from = "createImportReceiptPage.jsp";
     }
     
-    // Lấy danh sách provider để hiển thị
     ProviderDAO providerDAO = new ProviderDAO();
     List<Provider> providers = providerDAO.getProviderList();
 %>
@@ -35,7 +33,7 @@
         <tr>
             <td>Nhà cung cấp</td>
             <td>
-                <select name="providerId" id="providerId">
+                <select name="providerId" id="providerId" required>
                     <option value="">-- Chọn nhà cung cấp --</option>
                     <%
                         for (Provider p : providers) {
