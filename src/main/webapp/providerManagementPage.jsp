@@ -13,6 +13,13 @@
         response.sendRedirect("login.jsp?err=timeout");
         return;
     }
+
+    String role = staff.getRole();
+    if (role == null || !role.equalsIgnoreCase("manager")) {
+        response.sendRedirect("homepage.jsp");
+        return;
+    }
+    
     List<Provider> providerList = (List<Provider>) request.getAttribute("providerList");
 %>
 

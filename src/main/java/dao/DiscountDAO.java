@@ -1,11 +1,29 @@
 package dao;
 
 import model.Discount;
-import model.ProductDiscount;
-import model.ReceiptDiscount;
 import java.sql.*;
 
 public class DiscountDAO extends DAO {
+    
+    // Inner class để trả về cặp giá trị
+    public static class Pair<T, U> {
+        private T first;
+        private U second;
+        
+        public Pair(T first, U second) {
+            this.first = first;
+            this.second = second;
+        }
+        
+        public T getFirst() {
+            return first;
+        }
+        
+        public U getSecond() {
+            return second;
+        }
+    }
+    
     public DiscountDAO(){
         super();
     }
@@ -65,36 +83,37 @@ public class DiscountDAO extends DAO {
         }
     }
 
-    public Discount searchDiscount(String discountCode) throws Exception {
-        String sql = "SELECT d.*, pd.tblProductId, rd.tblDiscountId as tblReceiptDiscountId " +
-                     "FROM tblDiscount d " +
-                     "LEFT JOIN tblProductDiscount pd ON d.id = pd.tblDiscountId " +
-                     "LEFT JOIN tblReceiptDiscount rd ON d.id = rd.tblDiscountId " +
-                     "WHERE d.discountCode = ?";
+    public Pair<Discount, Integer> searchDiscount(String discountCode, int providerId) throws Exception {
+        // Tìm discount theo discountCode và providerId
+        String sql = "SELECT * FROM tblDiscount WHERE discountCode = ? AND tblProviderId = ?";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1, discountCode);
+        pstmt.setInt(2, providerId);
         ResultSet rs = pstmt.executeQuery();
         
         if (rs.next()) {
-            int productId = rs.getInt("tblProductId");
+            int discountId = rs.getInt("id");
             
-            if (productId > 0) {
-                // Đây là ProductDiscount
-                ProductDiscount discount = new ProductDiscount();
-                discount.setId(rs.getInt("id"));
-                discount.setDiscountCode(rs.getString("discountCode"));
-                discount.setAmount(rs.getInt("amount"));
-                return discount;
-            } else {
-                // Đây là ReceiptDiscount
-                ReceiptDiscount discount = new ReceiptDiscount();
-                discount.setId(rs.getInt("id"));
-                discount.setDiscountCode(rs.getString("discountCode"));
-                discount.setAmount(rs.getInt("amount"));
-                return discount;
+            // Tạo đối tượng Discount
+            Discount discount = new Discount();
+            discount.setId(discountId);
+            discount.setDiscountCode(rs.getString("discountCode"));
+            discount.setAmount(rs.getInt("amount"));
+            
+            // Tìm xem discount này có trong tblProductDiscount không
+            String sqlProductDiscount = "SELECT tblProductId FROM tblProductDiscount WHERE tblDiscountId = ?";
+            PreparedStatement pstmtProduct = con.prepareStatement(sqlProductDiscount);
+            pstmtProduct.setInt(1, discountId);
+            ResultSet rsProduct = pstmtProduct.executeQuery();
+            
+            int productId = 0;
+            if (rsProduct.next()) {
+                productId = rsProduct.getInt("tblProductId");
             }
+            
+            return new Pair<>(discount, productId);
         }
         
-        return null;
+        return new Pair<>(null, 0);
     }
 }

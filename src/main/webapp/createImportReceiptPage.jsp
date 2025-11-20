@@ -54,6 +54,8 @@
             // Xóa receipt cũ và lưu receipt mới vào session
             receipt = newReceipt;
             session.setAttribute("currentReceipt", receipt);
+            // Xóa discount khi đổi provider
+            session.removeAttribute("discountProductId");
         }
     }
     
@@ -71,7 +73,7 @@
 <form name="selectProviderForm" method="post">
     Nhà cung cấp
     <select name="providerId" id="providerId" onchange="this.form.submit()">
-        <option value="">-- Chọn nhà cung cấp --</option>
+        <option value="">Chọn nhà cung cấp</option>
         <%
             for (Provider p : providers) {
                 String selected = (receipt.getProvider() != null && receipt.getProvider().getId() == p.getId()) ? "selected" : "";
@@ -89,7 +91,7 @@
 <form name="addProductForm" method="post">
     Mặt hàng
     <select name="providerProductId" id="providerProductId" <%= (receipt.getProvider() == null ? "disabled" : "") %>>
-        <option value="">-- Chọn mặt hàng --</option>
+        <option value="">Chọn mặt hàng</option>
         <%
             for (ProviderProduct pp : providerProducts) {
         %>
@@ -147,6 +149,16 @@
         String indexParam = request.getParameter("index");
         if (indexParam != null) {
             int index = Integer.parseInt(indexParam);
+            ReceiptProduct removedProduct = receipt.getProducts().get(index);
+            
+            // Kiểm tra xem sản phẩm bị xóa có phải là sản phẩm được áp dụng chiết khấu không
+            Integer discountProductId = (Integer) session.getAttribute("discountProductId");
+            if (discountProductId != null && removedProduct.getProduct().getId() == discountProductId) {
+                // Xóa discount và discountProductId
+                receipt.setDiscount(null);
+                session.removeAttribute("discountProductId");
+            }
+            
             receipt.getProducts().remove(index);
             session.setAttribute("currentReceipt", receipt);
         }
@@ -163,6 +175,9 @@ Danh sách mặt hàng:<br>
     int totalAmount = 0;
     int totalDiscount = 0;
     int finalTotal = 0;
+    
+    // Lấy thông tin chiết khấu
+    Integer discountProductId = (Integer) session.getAttribute("discountProductId");
     
     if (receipt.getProducts() != null && receipt.getProducts().size() > 0) {
 %>
@@ -183,8 +198,13 @@ Danh sách mặt hàng:<br>
             int subtotal = rp.getUnitPrice() * rp.getQuantity();
             totalAmount += subtotal;
             
+            // Kiểm tra xem sản phẩm này có được áp dụng chiết khấu không
             int productDiscount = 0;
-            totalDiscount += productDiscount;
+            if (receipt.getDiscount() != null && discountProductId != null && rp.getProduct().getId() == discountProductId) {
+                // Sản phẩm này được áp dụng chiết khấu
+                productDiscount = receipt.getDiscount().getAmount();
+                totalDiscount += productDiscount;
+            }
     %>
     <tr>
         <td><%= rp.getProduct().getName() %></td>
@@ -205,8 +225,9 @@ Danh sách mặt hàng:<br>
     <%
         }
         
+        // Chiết khấu cho cả phiếu nhập (không phải chiết khấu sản phẩm)
         int receiptDiscount = 0;
-        if (receipt.getDiscount() != null && receipt.getDiscount() instanceof ReceiptDiscount) {
+        if (receipt.getDiscount() != null && discountProductId == null) {
             receiptDiscount = receipt.getDiscount().getAmount();
             totalDiscount += receiptDiscount;
         }

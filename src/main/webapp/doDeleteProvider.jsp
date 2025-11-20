@@ -14,6 +14,12 @@
         return;
     }
     
+    String role = staff.getRole();
+    if (role == null || !role.equalsIgnoreCase("manager")) {
+        response.sendRedirect("homepage.jsp");
+        return;
+    }
+    
     try {
         String idParam = request.getParameter("id");
         

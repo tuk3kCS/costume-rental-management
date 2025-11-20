@@ -14,6 +14,12 @@
         return;
     }
     
+    String role = staff.getRole();
+    if (role == null || !role.equalsIgnoreCase("manager")) {
+        response.sendRedirect("homepage.jsp");
+        return;
+    }
+    
     String idParam = request.getParameter("id");
     if (idParam == null || idParam.isEmpty()) {
         response.sendRedirect("providerManagementPage.jsp");

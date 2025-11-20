@@ -15,7 +15,7 @@
       else if(request.getParameter("err") !=null && request.getParameter("err").equalsIgnoreCase("fail")){
           %> <h4 color="red">Sai tên đăng nhập/mật khẩu!</h4><%
       }
-      %>
+%>
 <h2> Đăng nhập </h2>
     <form name="login" action="doLogin.jsp" method="post">
         <table border="0">
@@ -25,8 +25,7 @@
             </tr>
             <tr>
                 <td>Mật khẩu:</td>
-                <td><input type="password" name="password" id="password"
-                    required /></td>
+                <td><input type="password" name="password" id="password" required /></td>
             </tr>
             <tr>
                 <td></td>

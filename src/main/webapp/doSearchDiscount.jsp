@@ -28,64 +28,70 @@
             return;
         }
         
-        if (receipt == null) {
+        if (receipt == null || receipt.getProvider() == null) {
 %>
 <script type="text/javascript">
-    alert('Không tìm thấy phiếu nhập!');
+    alert('Không tìm thấy phiếu nhập hoặc chưa chọn nhà cung cấp!');
     window.location.href='createImportReceiptPage.jsp';
 </script>
 <%
             return;
         }
         
-        DiscountDAO dao = new DiscountDAO();
-        Discount discount = dao.searchDiscount(discountCode);
+        int providerId = receipt.getProvider().getId();
         
+        DiscountDAO dao = new DiscountDAO();
+        DiscountDAO.Pair<Discount, Integer> result = dao.searchDiscount(discountCode, providerId);
+        
+        Discount discount = result.getFirst();
+        int productId = result.getSecond();
+        
+        // Xử lý kết quả theo logic yêu cầu
         if (discount == null) {
+            // Mã chiết khấu không tồn tại
 %>
 <script type="text/javascript">
-    alert('Không tồn tại mã chiết khấu!');
+    alert('Mã chiết khấu không tồn tại!');
+    window.location.href='createImportReceiptPage.jsp';
+</script>
+<%
+        } else if (productId == 0) {
+            // Discount không rỗng, productId rỗng (= 0) -> áp dụng mã chiết khấu lên giá trị phiếu nhập
+            receipt.setDiscount(discount);
+            session.setAttribute("currentReceipt", receipt);
+            session.removeAttribute("discountProductId"); // Xóa productId cũ nếu có
+%>
+<script type="text/javascript">
+    alert('Áp dụng chiết khấu thành công!');
     window.location.href='createImportReceiptPage.jsp';
 </script>
 <%
         } else {
-            boolean isProductDiscount = discount instanceof ProductDiscount;
-            boolean applied = false;
+            // Discount không rỗng, productId không rỗng (> 0) -> kiểm tra xem có sản phẩm nào áp dụng được không
+            boolean found = false;
             
-            if (isProductDiscount) {
-                ProductDiscount productDiscount = (ProductDiscount) discount;
-                int productId = productDiscount.getId();
-                
-                boolean found = false;
-                for (ReceiptProduct rp : receipt.getProducts()) {
-                    if (rp.getProduct().getId() == productId) {
-                        found = true;
-                        applied = true;
-                        
-                        receipt.setDiscount(discount);
-                        session.setAttribute("currentReceipt", receipt);
-                        break;
-                    }
-                }
-                
-                if (!found) {
-%>
-<script type="text/javascript">
-    alert('Không có sản phẩm nào được áp dụng chiết khấu!');
-    window.location.href='createImportReceiptPage.jsp';
-</script>
-<%
-                }
-            } else {
-                applied = true;
-                receipt.setDiscount(discount);
-                session.setAttribute("currentReceipt", receipt);
-            }
-            
-            if (applied) {
+            for (ReceiptProduct rp : receipt.getProducts()) {
+                if (rp.getProduct().getId() == productId) {
+                    found = true;
+                    // Áp dụng chiết khấu lên sản phẩm này
+                    receipt.setDiscount(discount);
+                    session.setAttribute("discountProductId", productId); // Lưu productId để hiển thị chiết khấu
+                    session.setAttribute("currentReceipt", receipt);
 %>
 <script type="text/javascript">
     alert('Áp dụng chiết khấu thành công!');
+    window.location.href='createImportReceiptPage.jsp';
+</script>
+<%
+                    break;
+                }
+            }
+            
+            if (!found) {
+                // Không có sản phẩm nào áp dụng được chiết khấu
+%>
+<script type="text/javascript">
+    alert('Không có sản phẩm nào áp dụng được chiết khấu!');
     window.location.href='createImportReceiptPage.jsp';
 </script>
 <%
