@@ -13,11 +13,11 @@
     }
     
     user.setPassword(password);
- 
+    
     UserDAO dao = new UserDAO();
-    boolean kq = dao.checkLogin(user);
+    boolean result = dao.checkLogin(user);
 
-    if (kq) {
+    if (result) {
         Staff staff = new StaffDAO().getStaffInfor(username);
         session.setAttribute("staff", staff);
         response.sendRedirect("homepage.jsp");

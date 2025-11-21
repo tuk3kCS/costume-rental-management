@@ -152,39 +152,4 @@ public class ReceiptDAO extends DAO {
         
         return receiptList;
     }
-
-    public List<Receipt> searchReceipt(String keyword) throws Exception {
-        List<Receipt> receiptList = new ArrayList<>();
-        String sql = "SELECT r.*, s.fullName as staffName, p.name as providerName, p.id as tblProviderId " +
-                     "FROM tblReceipt r " +
-                     "LEFT JOIN tblUser s ON r.tblUserId = s.id " +
-                     "LEFT JOIN tblProvider p ON r.tblProviderId = p.id " +
-                     "WHERE CAST(r.id AS CHAR) LIKE ? OR s.fullName LIKE ? OR p.name LIKE ?";
-        PreparedStatement pstmt = con.prepareStatement(sql);
-        String searchPattern = "%" + keyword + "%";
-        pstmt.setString(1, searchPattern);
-        pstmt.setString(2, searchPattern);
-        pstmt.setString(3, searchPattern);
-        ResultSet rs = pstmt.executeQuery();
-        
-        while (rs.next()) {
-            Receipt receipt = new Receipt();
-            receipt.setId(rs.getInt("id"));
-            receipt.setCreatedDate(rs.getDate("createdDate"));
-            
-            Staff staff = new Staff();
-            staff.setId(rs.getInt("tblUserId"));
-            staff.setFullName(rs.getString("staffName"));
-            receipt.setStaff(staff);
-            
-            Provider provider = new Provider();
-            provider.setId(rs.getInt("tblProviderId"));
-            provider.setName(rs.getString("providerName"));
-            receipt.setProvider(provider);
-            
-            receiptList.add(receipt);
-        }
-        
-        return receiptList;
-    }
 }

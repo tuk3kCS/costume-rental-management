@@ -68,6 +68,8 @@
                 session.removeAttribute("tempProviderAddress");
                 session.removeAttribute("tempProviderPhoneNo");
                 session.removeAttribute("tempProviderEmail");
+                session.removeAttribute("providerList");
+                session.removeAttribute("searched");
 %>
 <script type="text/javascript">
     alert('Lưu thành công!');

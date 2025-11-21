@@ -20,7 +20,8 @@
         return;
     }
     
-    List<Provider> providerList = (List<Provider>) request.getAttribute("providerList");
+    List<Provider> providerList = (List<Provider>) session.getAttribute("providerList");
+    Boolean searched = (Boolean) session.getAttribute("searched");
 %>
 
 <h1>Quản lý thông tin nhà cung cấp</h1>
@@ -53,7 +54,6 @@
     <%
         int stt = 1;
         for (Provider provider : providerList) {
-            request.setAttribute("provider_" + provider.getId(), provider);
     %>
     <tr>
         <td><%= stt++ %></td>
@@ -71,7 +71,9 @@
     %>
 </table>
 <%
-    } else if (request.getAttribute("searched") != null && (Boolean)request.getAttribute("searched")) {
+    }
+    
+    else if (searched != null && searched) {
 %>
 <p>Không tìm thấy nhà cung cấp nào.</p>
 <%

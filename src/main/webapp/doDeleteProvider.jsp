@@ -37,6 +37,8 @@
         boolean result = dao.deleteProvider(provider);
         
         if (result) {
+            session.removeAttribute("providerList");
+            session.removeAttribute("searched");
 %>
 <script type="text/javascript">
     alert('Xóa thành công!');

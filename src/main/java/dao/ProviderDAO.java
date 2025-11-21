@@ -110,25 +110,6 @@ public class ProviderDAO extends DAO {
             throw e;
         }
     }
-
-    public Provider getProviderById(int id) throws Exception {
-        String sql = "SELECT * FROM tblProvider WHERE id = ?";
-        PreparedStatement pstmt = con.prepareStatement(sql);
-        pstmt.setInt(1, id);
-        ResultSet rs = pstmt.executeQuery();
-        
-        if (rs.next()) {
-            Provider provider = new Provider();
-            provider.setId(rs.getInt("id"));
-            provider.setName(rs.getString("name"));
-            provider.setAddress(rs.getString("address"));
-            provider.setPhoneNo(rs.getString("phoneNo"));
-            provider.setEmail(rs.getString("email"));
-            return provider;
-        }
-        
-        return null;
-    }
     
     public Provider checkProvider(Provider provider) throws Exception {
         String sql;

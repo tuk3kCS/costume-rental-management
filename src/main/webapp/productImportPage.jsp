@@ -13,9 +13,6 @@
         response.sendRedirect("login.jsp?err=timeout");
         return;
     }
-    
-    List<Receipt> receiptList = (List<Receipt>) request.getAttribute("receiptList");
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 %>
 
 <h1>Nhập trang phục về từ nhà cung cấp</h1>
@@ -33,41 +30,5 @@
 
 <br>
 
-<%
-    if (receiptList != null && receiptList.size() > 0) {
-%>
-<table border="1">
-    <tr>
-        <th>STT</th>
-        <th>Mã phiếu</th>
-        <th>Ngày tạo</th>
-        <th>Nhân viên</th>
-        <th>Nhà cung cấp</th>
-    </tr>
-    <%
-        int stt = 1;
-        for (Receipt receipt : receiptList) {
-            request.setAttribute("receipt_" + receipt.getId(), receipt);
-    %>
-    <tr>
-        <td><%= stt++ %></td>
-        <td><%= receipt.getId() %></td>
-        <td><%= receipt.getCreatedDate() != null ? sdf.format(receipt.getCreatedDate()) : "" %></td>
-        <td><%= receipt.getStaff() != null ? receipt.getStaff().getFullName() : "" %></td>
-        <td><%= receipt.getProvider() != null ? receipt.getProvider().getName() : "" %></td>
-    </tr>
-    <%
-        }
-    %>
-</table>
-<%
-    } else if (request.getAttribute("searched") != null && (Boolean)request.getAttribute("searched")) {
-%>
-<p>Không tìm thấy phiếu nhập nào.</p>
-<%
-    }
-%>
-
 </body>
 </html>
-

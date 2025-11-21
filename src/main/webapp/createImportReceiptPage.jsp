@@ -222,7 +222,9 @@
     %>
 </table>
 <%
-    } else {
+    }
+    
+    else {
 %>
 <p>Chưa có sản phẩm nào</p>
 <%

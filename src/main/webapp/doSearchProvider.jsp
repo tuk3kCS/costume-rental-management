@@ -18,11 +18,10 @@
         
         List<Provider> providerList = dao.searchProvider(keyword);
         
-        request.setAttribute("providerList", providerList);
-        request.setAttribute("searched", true);
+        session.setAttribute("providerList", providerList);
+        session.setAttribute("searched", true);
         
-        RequestDispatcher dispatcher = request.getRequestDispatcher("providerManagementPage.jsp");
-        dispatcher.forward(request, response);
+        response.sendRedirect("providerManagementPage.jsp");
         
     }
     

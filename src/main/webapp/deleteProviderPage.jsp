@@ -26,25 +26,25 @@
         return;
     }
     
-    Provider provider = (Provider) request.getAttribute("provider_" + idParam);
+    int providerId = Integer.parseInt(idParam);
+    
+    List<Provider> providerList = (List<Provider>) session.getAttribute("providerList");
+    if (providerList == null) {
+        response.sendRedirect("providerManagementPage.jsp");
+        return;
+    }
+    
+    Provider provider = null;
+    for (Provider p : providerList) {
+        if (p.getId() == providerId) {
+            provider = p;
+            break;
+        }
+    }
+    
     if (provider == null) {
-        try {
-            int id = Integer.parseInt(idParam);
-            ProviderDAO dao = new ProviderDAO();
-            provider = dao.getProviderById(id);
-            if (provider == null) {
-                response.sendRedirect("providerManagementPage.jsp");
-                return;
-            }
-            
-            request.setAttribute("provider_" + provider.getId(), provider);
-        }
-        
-        catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("providerManagementPage.jsp");
-            return;
-        }
+        response.sendRedirect("providerManagementPage.jsp");
+        return;
     }
 %>
 

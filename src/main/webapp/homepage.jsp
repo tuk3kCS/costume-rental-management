@@ -36,7 +36,7 @@
                     }
                 %>
                 <tr>
-                    <td><a href="productImportPage.jsp">Nhập trang phục về từ nhà cung cấp</    a></td>
+                    <td><a href="productImportPage.jsp">Nhập trang phục về từ nhà cung cấp</a></td>
                 </tr>
                 <%
                     if (role != null && role.equalsIgnoreCase("manager")) {
