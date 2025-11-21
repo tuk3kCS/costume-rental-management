@@ -46,36 +46,35 @@
         Discount discount = result.getFirst();
         int productId = result.getSecond();
         
-        // Xử lý kết quả theo logic yêu cầu
         if (discount == null) {
-            // Mã chiết khấu không tồn tại
 %>
 <script type="text/javascript">
     alert('Mã chiết khấu không tồn tại!');
     window.location.href='createImportReceiptPage.jsp';
 </script>
 <%
-        } else if (productId == 0) {
-            // Discount không rỗng, productId rỗng (= 0) -> áp dụng mã chiết khấu lên giá trị phiếu nhập
+        }
+        
+        else if (productId == 0) {
             receipt.setDiscount(discount);
             session.setAttribute("currentReceipt", receipt);
-            session.removeAttribute("discountProductId"); // Xóa productId cũ nếu có
+            session.removeAttribute("discountProductId");
 %>
 <script type="text/javascript">
     alert('Áp dụng chiết khấu thành công!');
     window.location.href='createImportReceiptPage.jsp';
 </script>
 <%
-        } else {
-            // Discount không rỗng, productId không rỗng (> 0) -> kiểm tra xem có sản phẩm nào áp dụng được không
+        }
+        
+        else {
             boolean found = false;
             
             for (ReceiptProduct rp : receipt.getProducts()) {
                 if (rp.getProduct().getId() == productId) {
                     found = true;
-                    // Áp dụng chiết khấu lên sản phẩm này
                     receipt.setDiscount(discount);
-                    session.setAttribute("discountProductId", productId); // Lưu productId để hiển thị chiết khấu
+                    session.setAttribute("discountProductId", productId);
                     session.setAttribute("currentReceipt", receipt);
 %>
 <script type="text/javascript">
@@ -88,7 +87,6 @@
             }
             
             if (!found) {
-                // Không có sản phẩm nào áp dụng được chiết khấu
 %>
 <script type="text/javascript">
     alert('Không có sản phẩm nào áp dụng được chiết khấu!');
@@ -98,7 +96,9 @@
             }
         }
         
-    } catch (Exception e) {
+    }
+    
+    catch (Exception e) {
         e.printStackTrace();
 %>
 <script type="text/javascript">

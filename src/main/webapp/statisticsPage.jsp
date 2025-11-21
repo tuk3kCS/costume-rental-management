@@ -14,7 +14,6 @@
         return;
     }
     
-    // Kiểm tra quyền truy cập - chỉ Manager mới được xem thống kê
     String role = staff.getRole();
     if (role == null || !role.equalsIgnoreCase("manager")) {
         response.sendRedirect("homepage.jsp");

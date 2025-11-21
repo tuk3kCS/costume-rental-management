@@ -24,7 +24,6 @@
     List<Provider> providers = providerDAO.getProviderList();
     List<ProviderProduct> providerProducts = new ArrayList<ProviderProduct>();
     
-    // Lấy provider ID đã chọn
     String selectedProviderId = request.getParameter("providerId");
     if (selectedProviderId != null && !selectedProviderId.isEmpty()) {
         int providerId = Integer.parseInt(selectedProviderId);

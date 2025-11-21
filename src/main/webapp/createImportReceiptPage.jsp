@@ -28,22 +28,18 @@
     ProductDAO productDAO = new ProductDAO();
     List<Provider> providers = providerDAO.getProviderList();
     
-    // Xử lý khi chọn nhà cung cấp từ dropdown
     String providerIdParam = request.getParameter("providerId");
     if (providerIdParam != null && !providerIdParam.isEmpty()) {
         int providerId = Integer.parseInt(providerIdParam);
         
-        // Kiểm tra xem provider có thay đổi không
         boolean providerChanged = (receipt.getProvider() == null || receipt.getProvider().getId() != providerId);
         
         if (providerChanged) {
-            // Tạo receipt mới khi thay đổi nhà cung cấp
             Receipt newReceipt = new Receipt();
             newReceipt.setCreatedDate(receipt.getCreatedDate());
             newReceipt.setStaff(receipt.getStaff());
             newReceipt.setProducts(new ArrayList<ReceiptProduct>());
             
-            // Set provider mới
             for (Provider p : providers) {
                 if (p.getId() == providerId) {
                     newReceipt.setProvider(p);
@@ -51,15 +47,12 @@
                 }
             }
             
-            // Xóa receipt cũ và lưu receipt mới vào session
             receipt = newReceipt;
             session.setAttribute("currentReceipt", receipt);
-            // Xóa discount khi đổi provider
             session.removeAttribute("discountProductId");
         }
     }
     
-    // Lấy danh sách sản phẩm theo nhà cung cấp đã chọn
     List<ProviderProduct> providerProducts = new ArrayList<ProviderProduct>();
     if (receipt.getProvider() != null) {
         providerProducts = productDAO.getProductList(receipt.getProvider().getId());
@@ -118,18 +111,15 @@
             
             for (ProviderProduct pp : providerProducts) {
                 if (pp.getId() == providerProductId) {
-                    // Kiểm tra xem product đã tồn tại trong danh sách chưa
                     boolean productExists = false;
                     for (ReceiptProduct rp : receipt.getProducts()) {
                         if (rp.getProduct().getId() == pp.getProduct().getId()) {
-                            // Nếu đã tồn tại, chỉ cần tăng số lượng
                             rp.setQuantity(rp.getQuantity() + quantity);
                             productExists = true;
                             break;
                         }
                     }
                     
-                    // Nếu chưa tồn tại, thêm mới vào danh sách
                     if (!productExists) {
                         ReceiptProduct rp = new ReceiptProduct();
                         rp.setProduct(pp.getProduct());
@@ -151,10 +141,8 @@
             int index = Integer.parseInt(indexParam);
             ReceiptProduct removedProduct = receipt.getProducts().get(index);
             
-            // Kiểm tra xem sản phẩm bị xóa có phải là sản phẩm được áp dụng chiết khấu không
             Integer discountProductId = (Integer) session.getAttribute("discountProductId");
             if (discountProductId != null && removedProduct.getProduct().getId() == discountProductId) {
-                // Xóa discount và discountProductId
                 receipt.setDiscount(null);
                 session.removeAttribute("discountProductId");
             }
@@ -167,16 +155,17 @@
 
 <br>
 
-Nhân viên nhập: <%= receipt.getStaff() != null ? receipt.getStaff().getFullName() : "" %><br>
-Nhà cung cấp: <%= receipt.getProvider() != null ? receipt.getProvider().getName() : "" %><br>
-Danh sách mặt hàng:<br>
+    Nhân viên nhập: <%= receipt.getStaff() != null ? receipt.getStaff().getFullName() : "" %><br>
+    Nhà cung cấp: <%= receipt.getProvider() != null ? receipt.getProvider().getName() : "" %><br>
+    Danh sách mặt hàng:
+
+<br>
 
 <%
     int totalAmount = 0;
     int totalDiscount = 0;
     int finalTotal = 0;
     
-    // Lấy thông tin chiết khấu
     Integer discountProductId = (Integer) session.getAttribute("discountProductId");
     
     if (receipt.getProducts() != null && receipt.getProducts().size() > 0) {
@@ -198,10 +187,8 @@ Danh sách mặt hàng:<br>
             int subtotal = rp.getUnitPrice() * rp.getQuantity();
             totalAmount += subtotal;
             
-            // Kiểm tra xem sản phẩm này có được áp dụng chiết khấu không
             int productDiscount = 0;
             if (receipt.getDiscount() != null && discountProductId != null && rp.getProduct().getId() == discountProductId) {
-                // Sản phẩm này được áp dụng chiết khấu
                 productDiscount = receipt.getDiscount().getAmount();
                 totalDiscount += productDiscount;
             }
@@ -225,7 +212,6 @@ Danh sách mặt hàng:<br>
     <%
         }
         
-        // Chiết khấu cho cả phiếu nhập (không phải chiết khấu sản phẩm)
         int receiptDiscount = 0;
         if (receipt.getDiscount() != null && discountProductId == null) {
             receiptDiscount = receipt.getDiscount().getAmount();
@@ -254,8 +240,8 @@ Danh sách mặt hàng:<br>
 
 <br>
 
-Tổng chiết khấu: <%= totalDiscount %><br>
-Tổng tiền: <%= finalTotal %><br>
+    Tổng chiết khấu: <%= totalDiscount %><br>
+    Tổng tiền: <%= finalTotal %><br>
 
 <br>
 

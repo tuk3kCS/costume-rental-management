@@ -48,10 +48,8 @@ public class ProductDAO extends DAO {
 
     public boolean saveProduct(ProviderProduct providerProduct) throws Exception {
         try {
-            // Bắt đầu transaction
             con.setAutoCommit(false);
             
-            // Insert vào tblProduct
             String sqlProduct = "INSERT INTO tblProduct (name, size, color) VALUES (?, ?, ?)";
             PreparedStatement pstmtProduct = con.prepareStatement(sqlProduct, Statement.RETURN_GENERATED_KEYS);
             pstmtProduct.setString(1, providerProduct.getProduct().getName());
@@ -60,14 +58,12 @@ public class ProductDAO extends DAO {
             int result = pstmtProduct.executeUpdate();
             
             if (result > 0) {
-                // Lấy ID của product vừa insert
                 ResultSet rs = pstmtProduct.getGeneratedKeys();
                 int productId = 0;
                 if (rs.next()) {
                     productId = rs.getInt(1);
                 }
                 
-                // Insert vào tblProviderProduct
                 String sqlProviderProduct = "INSERT INTO tblProviderProduct (tblProductId, tblProviderId, unitPrice) VALUES (?, ?, ?)";
                 PreparedStatement pstmtProviderProduct = con.prepareStatement(sqlProviderProduct);
                 pstmtProviderProduct.setInt(1, productId);
@@ -75,7 +71,6 @@ public class ProductDAO extends DAO {
                 pstmtProviderProduct.setInt(3, providerProduct.getUnitPrice());
                 pstmtProviderProduct.executeUpdate();
                 
-                // Commit transaction
                 con.commit();
                 con.setAutoCommit(true);
                 return true;

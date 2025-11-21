@@ -41,7 +41,6 @@
         int amount = Integer.parseInt(amountParam);
         Integer productId = null;
         
-        // Tạo đối tượng Discount
         Discount discount;
         if (productIdParam != null && !productIdParam.isEmpty()) {
             productId = Integer.parseInt(productIdParam);
@@ -53,7 +52,6 @@
         discount.setDiscountCode(discountCode);
         discount.setAmount(amount);
         
-        // Lưu vào database
         DiscountDAO discountDAO = new DiscountDAO();
         boolean result = discountDAO.saveDiscount(discount, providerId, productId);
         
@@ -73,7 +71,9 @@
             <%
         }
         
-    } catch (Exception e) {
+    }
+    
+    catch (Exception e) {
         e.printStackTrace();
         %>
         <script>

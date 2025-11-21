@@ -6,7 +6,6 @@ import java.util.*;
 
 public class ProviderStatDAO extends DAO {
     
-    // Inner class để chứa thông tin thống kê của provider
     public static class ProviderStat {
         private Provider provider;
         private int totalExpense;
@@ -38,10 +37,13 @@ public class ProviderStatDAO extends DAO {
     public List<ProviderStat> getProviderStat(java.util.Date startTime, java.util.Date endTime) throws Exception {
         List<ProviderStat> statList = new ArrayList<>();
         
-        // Query để lấy thống kê từng nhà cung cấp
         String sql = "SELECT p.id, p.name, p.address, p.phoneNo, p.email, " +
                      "COUNT(DISTINCT r.id) as totalReceipts, " +
-                     "COALESCE(SUM(rp.quantity * rp.unitPrice), 0) as totalExpense " +
+                     "(COALESCE(SUM(rp.quantity * rp.unitPrice), 0) - " +
+                     "COALESCE((SELECT SUM(d.amount) FROM tblReceipt r2 " +
+                     "INNER JOIN tblDiscount d ON r2.tblDiscountId = d.id " +
+                     "WHERE r2.tblProviderId = p.id " +
+                     "AND r2.createdDate BETWEEN ? AND ?), 0)) as totalExpense " +
                      "FROM tblProvider p " +
                      "LEFT JOIN tblReceipt r ON p.id = r.tblProviderId " +
                      "AND r.createdDate BETWEEN ? AND ? " +
@@ -52,6 +54,8 @@ public class ProviderStatDAO extends DAO {
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setDate(1, new java.sql.Date(startTime.getTime()));
         pstmt.setDate(2, new java.sql.Date(endTime.getTime()));
+        pstmt.setDate(3, new java.sql.Date(startTime.getTime()));
+        pstmt.setDate(4, new java.sql.Date(endTime.getTime()));
         ResultSet rs = pstmt.executeQuery();
         
         while (rs.next()) {

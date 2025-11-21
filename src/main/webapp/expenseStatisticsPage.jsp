@@ -14,18 +14,16 @@
         return;
     }
     
-    // Kiểm tra quyền truy cập
     String role = staff.getRole();
     if (role == null || !role.equalsIgnoreCase("manager")) {
         response.sendRedirect("homepage.jsp");
         return;
     }
     
-    // Lấy dữ liệu từ request
-    List<ProviderStatDAO.ProviderStat> statList = (List<ProviderStatDAO.ProviderStat>) request.getAttribute("statList");
-    Integer totalExpense = (Integer) request.getAttribute("totalExpense");
-    String startDate = (String) request.getAttribute("startDate");
-    String endDate = (String) request.getAttribute("endDate");
+    List<ProviderStatDAO.ProviderStat> statList = (List<ProviderStatDAO.ProviderStat>) session.getAttribute("statList");
+    Integer totalExpense = (Integer) session.getAttribute("totalExpense");
+    String startDate = (String) session.getAttribute("startDate");
+    String endDate = (String) session.getAttribute("endDate");
     
     if (statList == null || totalExpense == null || startDate == null || endDate == null) {
         response.sendRedirect("statisticsPage.jsp");
@@ -82,7 +80,9 @@
     %>
 </table>
 <%
-    } else {
+    }
+    
+    else {
 %>
 <p>Không có dữ liệu thống kê trong khoảng thời gian này.</p>
 <%

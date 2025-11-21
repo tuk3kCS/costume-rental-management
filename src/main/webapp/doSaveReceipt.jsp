@@ -58,7 +58,9 @@
     window.location.href='productImportPage.jsp';
 </script>
 <%
-        } else {
+        }
+        
+        else {
 %>
 <script type="text/javascript">
     alert('Lưu phiếu nhập thất bại!');
@@ -67,7 +69,9 @@
 <%
         }
         
-    } catch (Exception e) {
+    }
+    
+    catch (Exception e) {
         e.printStackTrace();
 %>
 <script type="text/javascript">

@@ -46,6 +46,10 @@
             }
             
             else {
+                session.setAttribute("tempProviderName", name);
+                session.setAttribute("tempProviderAddress", address);
+                session.setAttribute("tempProviderPhoneNo", phoneNo);
+                session.setAttribute("tempProviderEmail", email);
                 redirectUrl = "addProviderPage.jsp?from=" + from;
             }
 %>
@@ -60,6 +64,10 @@
             boolean result = dao.saveProvider(provider);
             
             if (result) {
+                session.removeAttribute("tempProviderName");
+                session.removeAttribute("tempProviderAddress");
+                session.removeAttribute("tempProviderPhoneNo");
+                session.removeAttribute("tempProviderEmail");
 %>
 <script type="text/javascript">
     alert('Lưu thành công!');
@@ -76,6 +84,10 @@
                 }
                 
                 else {
+                    session.setAttribute("tempProviderName", name);
+                    session.setAttribute("tempProviderAddress", address);
+                    session.setAttribute("tempProviderPhoneNo", phoneNo);
+                    session.setAttribute("tempProviderEmail", email);
                     redirectUrl = "addProviderPage.jsp?from=" + from;
                 }
 %>
@@ -91,9 +103,22 @@
     
     catch (Exception e) {
         e.printStackTrace();
+        String idParam = request.getParameter("id");
+        String name = request.getParameter("name");
+        String address = request.getParameter("address");
+        String phoneNo = request.getParameter("phoneNo");
+        String email = request.getParameter("email");
         String from = request.getParameter("from");
+        
         if (from == null || from.isEmpty()) {
             from = "providerManagementPage.jsp";
+        }
+        
+        if (idParam == null || idParam.isEmpty()) {
+            session.setAttribute("tempProviderName", name);
+            session.setAttribute("tempProviderAddress", address);
+            session.setAttribute("tempProviderPhoneNo", phoneNo);
+            session.setAttribute("tempProviderEmail", email);
         }
 %>
 <script type="text/javascript">

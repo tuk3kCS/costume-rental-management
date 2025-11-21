@@ -18,28 +18,45 @@
     if (from == null || from.isEmpty()) {
         from = "providerManagementPage.jsp";
     }
+    
+    String tempName = (String) session.getAttribute("tempProviderName");
+    String tempAddress = (String) session.getAttribute("tempProviderAddress");
+    String tempPhoneNo = (String) session.getAttribute("tempProviderPhoneNo");
+    String tempEmail = (String) session.getAttribute("tempProviderEmail");
+    
+    session.removeAttribute("tempProviderName");
+    session.removeAttribute("tempProviderAddress");
+    session.removeAttribute("tempProviderPhoneNo");
+    session.removeAttribute("tempProviderEmail");
+    
+    if (tempName == null) tempName = "";
+    if (tempAddress == null) tempAddress = "";
+    if (tempPhoneNo == null) tempPhoneNo = "";
+    if (tempEmail == null) tempEmail = "";
 %>
 
 <h2>Thêm nhà cung cấp</h2>
+<button onclick="location.href='<%= from %>'" style="float: right;">Quay lại</button>
+<br><br>
 
 <form name="addProviderForm" action="doSaveProvider.jsp" method="post">
     <input type="hidden" name="from" value="<%= from %>" />
     <table border="0">
         <tr>
             <td>Tên:</td>
-            <td><input type="text" name="name" id="name" required /></td>
+            <td><input type="text" name="name" id="name" value="<%= tempName %>" required /></td>
         </tr>
         <tr>
             <td>Địa chỉ:</td>
-            <td><input type="text" name="address" id="address" required /></td>
+            <td><input type="text" name="address" id="address" value="<%= tempAddress %>" required /></td>
         </tr>
         <tr>
             <td>Email:</td>
-            <td><input type="email" name="email" id="email" required /></td>
+            <td><input type="email" name="email" id="email" value="<%= tempEmail %>" required /></td>
         </tr>
         <tr>
             <td>Số ĐT:</td>
-            <td><input type="text" name="phoneNo" id="phoneNo" required /></td>
+            <td><input type="text" name="phoneNo" id="phoneNo" value="<%= tempPhoneNo %>" required /></td>
         </tr>
         <tr>
             <td></td>

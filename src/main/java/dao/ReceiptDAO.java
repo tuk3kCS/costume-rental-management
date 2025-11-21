@@ -14,10 +14,8 @@ public class ReceiptDAO extends DAO {
 
     public boolean saveReceipt(Receipt receipt) throws Exception {
         try {
-            // Bắt đầu transaction
             con.setAutoCommit(false);
             
-            // Insert vào tblReceipt
             String sqlReceipt = "INSERT INTO tblReceipt (createdDate, tblUserId, tblProviderId, tblDiscountId) VALUES (?, ?, ?, ?)";
             PreparedStatement pstmtReceipt = con.prepareStatement(sqlReceipt, Statement.RETURN_GENERATED_KEYS);
             pstmtReceipt.setDate(1, new java.sql.Date(receipt.getCreatedDate().getTime()));
@@ -33,14 +31,12 @@ public class ReceiptDAO extends DAO {
             int result = pstmtReceipt.executeUpdate();
             
             if (result > 0) {
-                // Lấy ID của receipt vừa insert
                 ResultSet rs = pstmtReceipt.getGeneratedKeys();
                 int receiptId = 0;
                 if (rs.next()) {
                     receiptId = rs.getInt(1);
                 }
                 
-                // Insert các sản phẩm vào tblReceiptProduct
                 String sqlProduct = "INSERT INTO tblReceiptProduct (tblReceiptId, tblProductId, quantity, unitPrice) VALUES (?, ?, ?, ?)";
                 PreparedStatement pstmtProduct = con.prepareStatement(sqlProduct);
                 
@@ -54,7 +50,6 @@ public class ReceiptDAO extends DAO {
                 
                 pstmtProduct.executeBatch();
                 
-                // Commit transaction
                 con.commit();
                 con.setAutoCommit(true);
                 return true;
@@ -74,7 +69,6 @@ public class ReceiptDAO extends DAO {
     public List<Receipt> getReceiptList(java.sql.Date startTime, java.sql.Date endTime, int providerId) throws Exception {
         List<Receipt> receiptList = new ArrayList<>();
         
-        // Query để lấy danh sách phiếu nhập theo providerId và khoảng thời gian
         String sql = "SELECT r.id, r.createdDate, r.tblUserId, r.tblProviderId, r.tblDiscountId, " +
                      "u.username, u.fullName, u.role, " +
                      "p.name as providerName, p.address, p.phoneNo, p.email " +
@@ -95,7 +89,6 @@ public class ReceiptDAO extends DAO {
             receipt.setId(rs.getInt("id"));
             receipt.setCreatedDate(rs.getDate("createdDate"));
             
-            // Tạo đối tượng Staff
             Staff staff = new Staff();
             staff.setId(rs.getInt("tblUserId"));
             staff.setUsername(rs.getString("username"));
@@ -103,7 +96,6 @@ public class ReceiptDAO extends DAO {
             staff.setRole(rs.getString("role"));
             receipt.setStaff(staff);
             
-            // Tạo đối tượng Provider
             Provider provider = new Provider();
             provider.setId(rs.getInt("tblProviderId"));
             provider.setName(rs.getString("providerName"));
@@ -112,7 +104,6 @@ public class ReceiptDAO extends DAO {
             provider.setEmail(rs.getString("email"));
             receipt.setProvider(provider);
             
-            // Lấy Discount (nếu có)
             int discountId = rs.getInt("tblDiscountId");
             if (!rs.wasNull() && discountId > 0) {
                 String sqlDiscount = "SELECT * FROM tblDiscount WHERE id = ?";
@@ -129,7 +120,6 @@ public class ReceiptDAO extends DAO {
                 }
             }
             
-            // Lấy danh sách sản phẩm trong phiếu nhập
             String sqlProducts = "SELECT rp.id, rp.quantity, rp.unitPrice, " +
                                  "prod.id as productId, prod.name, prod.size, prod.color " +
                                  "FROM tblReceiptProduct rp " +

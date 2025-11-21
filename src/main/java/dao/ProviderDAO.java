@@ -61,11 +61,54 @@ public class ProviderDAO extends DAO {
     }
 
     public boolean deleteProvider(Provider provider) throws Exception {
-        String sql = "DELETE FROM tblProvider WHERE id = ?";
-        PreparedStatement pstmt = con.prepareStatement(sql);
-        pstmt.setInt(1, provider.getId());
-        int result = pstmt.executeUpdate();
-        return result > 0;
+        try {
+            con.setAutoCommit(false);
+            
+            String sqlGetDiscounts = "SELECT id FROM tblDiscount WHERE tblProviderId = ?";
+            PreparedStatement pstmtGetDiscounts = con.prepareStatement(sqlGetDiscounts);
+            pstmtGetDiscounts.setInt(1, provider.getId());
+            ResultSet rsDiscounts = pstmtGetDiscounts.executeQuery();
+            
+            List<Integer> discountIds = new ArrayList<>();
+            while (rsDiscounts.next()) {
+                discountIds.add(rsDiscounts.getInt("id"));
+            }
+            
+            if (!discountIds.isEmpty()) {
+                for (Integer discountId : discountIds) {
+                    String sqlDeleteProductDiscount = "DELETE FROM tblProductDiscount WHERE tblDiscountId = ?";
+                    PreparedStatement pstmtDeleteProductDiscount = con.prepareStatement(sqlDeleteProductDiscount);
+                    pstmtDeleteProductDiscount.setInt(1, discountId);
+                    pstmtDeleteProductDiscount.executeUpdate();
+                    
+                    String sqlDeleteReceiptDiscount = "DELETE FROM tblReceiptDiscount WHERE tblDiscountId = ?";
+                    PreparedStatement pstmtDeleteReceiptDiscount = con.prepareStatement(sqlDeleteReceiptDiscount);
+                    pstmtDeleteReceiptDiscount.setInt(1, discountId);
+                    pstmtDeleteReceiptDiscount.executeUpdate();
+                }
+            }
+            
+            String sqlDeleteDiscount = "DELETE FROM tblDiscount WHERE tblProviderId = ?";
+            PreparedStatement pstmtDeleteDiscount = con.prepareStatement(sqlDeleteDiscount);
+            pstmtDeleteDiscount.setInt(1, provider.getId());
+            pstmtDeleteDiscount.executeUpdate();
+            
+            String sqlDeleteProvider = "DELETE FROM tblProvider WHERE id = ?";
+            PreparedStatement pstmtDeleteProvider = con.prepareStatement(sqlDeleteProvider);
+            pstmtDeleteProvider.setInt(1, provider.getId());
+            int result = pstmtDeleteProvider.executeUpdate();
+            
+            con.commit();
+            con.setAutoCommit(true);
+            return result > 0;
+            
+        }
+        
+        catch (Exception e) {
+            con.rollback();
+            con.setAutoCommit(true);
+            throw e;
+        }
     }
 
     public Provider getProviderById(int id) throws Exception {

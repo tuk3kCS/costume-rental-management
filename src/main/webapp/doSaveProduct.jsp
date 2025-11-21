@@ -20,24 +20,20 @@
             from = "createImportReceiptPage.jsp";
         }
         
-        // Tạo đối tượng Product
         Product product = new Product();
         product.setName(name);
         product.setSize(size);
         product.setColor(color);
         
-        // Lấy đối tượng Provider từ database
         int providerId = Integer.parseInt(providerIdParam);
         ProviderDAO providerDAO = new ProviderDAO();
         Provider provider = providerDAO.getProviderById(providerId);
         
-        // Tạo đối tượng ProviderProduct
         ProviderProduct providerProduct = new ProviderProduct();
         providerProduct.setProduct(product);
         providerProduct.setProvider(provider);
         providerProduct.setUnitPrice(Integer.parseInt(unitPriceParam));
         
-        // Lưu vào database
         ProductDAO productDAO = new ProductDAO();
         boolean result = productDAO.saveProduct(providerProduct);
         
@@ -48,7 +44,9 @@
     window.location.href='<%= from %>';
 </script>
 <%
-        } else {
+        }
+        
+        else {
 %>
 <script type="text/javascript">
     alert('Lưu thất bại!');
@@ -57,7 +55,9 @@
 <%
         }
         
-    } catch (Exception e) {
+    }
+    
+    catch (Exception e) {
         e.printStackTrace();
         String from = request.getParameter("from");
         if (from == null || from.isEmpty()) {

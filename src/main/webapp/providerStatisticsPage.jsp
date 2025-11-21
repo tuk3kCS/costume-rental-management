@@ -14,20 +14,18 @@
         return;
     }
     
-    // Kiểm tra quyền truy cập
     String role = staff.getRole();
     if (role == null || !role.equalsIgnoreCase("manager")) {
         response.sendRedirect("homepage.jsp");
         return;
     }
     
-    // Lấy dữ liệu từ request
-    List<Receipt> receiptList = (List<Receipt>) request.getAttribute("receiptList");
-    Provider provider = (Provider) request.getAttribute("provider");
-    Integer totalExpense = (Integer) request.getAttribute("totalExpense");
-    Integer totalReceipts = (Integer) request.getAttribute("totalReceipts");
-    String startDate = (String) request.getAttribute("startDate");
-    String endDate = (String) request.getAttribute("endDate");
+    List<Receipt> receiptList = (List<Receipt>) session.getAttribute("receiptList");
+    Provider provider = (Provider) session.getAttribute("provider");
+    Integer totalExpense = (Integer) session.getAttribute("totalExpense");
+    Integer totalReceipts = (Integer) session.getAttribute("totalReceipts");
+    String startDate = (String) session.getAttribute("providerStartDate");
+    String endDate = (String) session.getAttribute("providerEndDate");
     
     if (receiptList == null || provider == null || startDate == null || endDate == null) {
         response.sendRedirect("statisticsPage.jsp");
@@ -67,7 +65,6 @@
     <%
         int stt = 1;
         for (Receipt receipt : receiptList) {
-            // Tính tổng số sản phẩm
             int totalQuantity = 0;
             int receiptTotal = 0;
             
@@ -76,7 +73,6 @@
                 receiptTotal += rp.getQuantity() * rp.getUnitPrice();
             }
             
-            // Trừ chiết khấu nếu có
             if (receipt.getDiscount() != null) {
                 receiptTotal -= receipt.getDiscount().getAmount();
             }
@@ -96,7 +92,9 @@
     %>
 </table>
 <%
-    } else {
+    }
+    
+    else {
 %>
 <p>Không có phiếu nhập nào trong khoảng thời gian này.</p>
 <%
