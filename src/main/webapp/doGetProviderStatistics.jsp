@@ -65,8 +65,21 @@
         }
         
         else {
-            ProviderDAO providerDAO = new ProviderDAO();
-            provider = providerDAO.getProviderById(providerId);
+            List<ProviderStatDAO.ProviderStat> statList = (List<ProviderStatDAO.ProviderStat>) session.getAttribute("statList");
+            if (statList == null) {
+                throw new Exception("Không tìm thấy danh sách thống kê trong session");
+            }
+            
+            for (ProviderStatDAO.ProviderStat stat : statList) {
+                if (stat.getProvider().getId() == providerId) {
+                    provider = stat.getProvider();
+                    break;
+                }
+            }
+            
+            if (provider == null) {
+                throw new Exception("Không tìm thấy nhà cung cấp với ID: " + providerId);
+            }
         }
         
         session.setAttribute("receiptList", receiptList);

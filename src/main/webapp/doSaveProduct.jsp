@@ -26,8 +26,23 @@
         product.setColor(color);
         
         int providerId = Integer.parseInt(providerIdParam);
-        ProviderDAO providerDAO = new ProviderDAO();
-        Provider provider = providerDAO.getProviderById(providerId);
+        
+        List<Provider> providerList = (List<Provider>) session.getAttribute("providerList");
+        if (providerList == null) {
+            throw new Exception("Không tìm thấy danh sách nhà cung cấp trong session");
+        }
+        
+        Provider provider = null;
+        for (Provider p : providerList) {
+            if (p.getId() == providerId) {
+                provider = p;
+                break;
+            }
+        }
+        
+        if (provider == null) {
+            throw new Exception("Không tìm thấy nhà cung cấp với ID: " + providerId);
+        }
         
         ProviderProduct providerProduct = new ProviderProduct();
         providerProduct.setProduct(product);

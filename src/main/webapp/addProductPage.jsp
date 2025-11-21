@@ -21,6 +21,8 @@
     
     ProviderDAO providerDAO = new ProviderDAO();
     List<Provider> providers = providerDAO.getProviderList();
+    
+    session.setAttribute("providerList", providers);
 %>
 
 <h2>Thêm mới mặt hàng</h2>

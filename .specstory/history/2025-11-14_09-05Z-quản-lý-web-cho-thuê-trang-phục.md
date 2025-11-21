@@ -1680,3 +1680,671 @@ Bạn có muốn tôi tạo các trang JSP cho từng chức năng không (provi
 
 ---
 
+_**User (2025-11-21 08:52Z)**_
+
+đọc @history và codebase để hiểu tôi đang muốn làm gì
+
+---
+
+_**Agent (model claude-4.5-sonnet-thinking, mode Agent)**_
+
+<think><details><summary>Thought Process</summary>
+Người dùng muốn tôi đọc lịch sử trong thư mục .specstory/history và hiểu codebase hiện tại để biết họ đang làm gì. Tôi sẽ đọc các file history và một số file quan trọng trong codebase.</details></think>
+
+---
+
+Để tôi đọc lịch sử và codebase của bạn để hiểu rõ hơn về dự án.
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: d:\costume-rental-management\.specstory\history\2025-11-20_03-30Z-tạo-file-receiptdetailpage-jsp-và-sửa-session.md</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: d:\costume-rental-management\.specstory\history\2025-11-15_11-02Z-sửa-file-doaddprovider-thành-dosaveprovider-jsp.md</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: d:\costume-rental-management\.specstory\history\2025-11-14_09-05Z-quản-lý-web-cho-thuê-trang-phục.md</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="generic" data-tool-name="list_dir">
+<details>
+            <summary>Tool use: **list_directory** • Listed directory undefined • **0** results</summary>
+        
+No results found
+</details>
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+Được rồi, tôi đã đọc lịch sử và thấy cấu trúc thư mục hiện tại. Hãy để tôi đọc thêm một số file quan trọng để hiểu rõ hơn.</details></think>
+
+---
+
+Tôi sẽ đọc thêm một số file quan trọng trong codebase để hiểu đầy đủ hơn.
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/webapp/homepage.jsp</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/webapp/providerManagementPage.jsp</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/webapp/createImportReceiptPage.jsp</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/java/dao/ProviderDAO.java</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/java/model/Provider.java</summary>
+
+</details>
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+Tuyệt vời! Bây giờ tôi đã hiểu rõ hơn về dự án. Để tôi đọc thêm một vài file quan trọng khác.</details></think>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/webapp/doLogin.jsp</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/java/dao/UserDAO.java</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/java/dao/ReceiptDAO.java</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/java/model/Receipt.java</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/main/webapp/statisticsPage.jsp</summary>
+
+</details>
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+Tuyệt vời! Giờ tôi đã hiểu rất rõ về dự án. Để tôi tổng hợp và trả lời cho người dùng.</details></think>
+
+---
+
+Dạ, tôi đã đọc kỹ lịch sử và phân tích toàn bộ codebase của bạn. Để tôi tóm tắt những gì bạn đang làm:
+
+## 📋 **TỔNG QUAN DỰ ÁN**
+
+### 🎯 **Dự án: Hệ thống quản lý cho thuê trang phục (Costume Rental Management)**
+
+**Công nghệ stack:**
+- **Backend**: Java (JSP, JDBC)
+- **Database**: MySQL (database: `costume_rental_management`)
+- **Server**: Tomcat
+- **Architecture**: MVC pattern (Model-DAO-View)
+
+---
+
+## 🏗️ **CẤU TRÚC HỆ THỐNG**
+
+### **1. Model Layer** ✅ Hoàn thiện
+```
+User (base class)
+├── Staff
+│   └── ImportStaff
+└── Manager
+
+Provider (+ discounts list)
+Product (+ productDiscounts list)
+ProviderProduct (linking provider + product)
+
+Receipt
+├── Staff
+├── Provider
+├── Products (ArrayList<ReceiptProduct>)
+└── Discount
+
+ReceiptProduct
+Discount (base)
+├── ProductDiscount
+└── ReceiptDiscount
+```
+
+### **2. DAO Layer** ✅ Hoàn thiện
+- `DAO.java` - Base class kết nối MySQL
+- `UserDAO` - checkLogin()
+- `StaffDAO` - getStaffInfor()
+- `ProviderDAO` - CRUD providers
+- `ProductDAO` - CRUD products
+- `ReceiptDAO` - Save/get receipts
+- `DiscountDAO` - Search/save discounts
+- `ProviderStatDAO` - Statistics
+
+### **3. View Layer (JSP)** ✅ Đã triển khai đầy đủ
+
+**Authentication:**
+- `login.jsp` - Đăng nhập
+- `doLogin.jsp` - Xử lý đăng nhập (lưu Staff object vào session)
+- `doLogout.jsp` - Đăng xuất
+- `homepage.jsp` - Trang chủ (phân quyền theo role)
+
+**Provider Management** (Manager only):
+- `providerManagementPage.jsp` - Quản lý nhà cung cấp
+- `addProviderPage.jsp` - Thêm NCC
+- `modifyProviderPage.jsp` - Sửa NCC
+- `deleteProviderPage.jsp` - Xóa NCC
+- `doSearchProvider.jsp` - Tìm kiếm NCC
+- `doSaveProvider.jsp` - Lưu NCC
+- `doDeleteProvider.jsp` - Xóa NCC
+
+**Product Import** (All users):
+- `productImportPage.jsp` - Danh sách phiếu nhập
+- `createImportReceiptPage.jsp` - Tạo phiếu nhập
+- `receiptDetailPage.jsp` - Chi tiết phiếu nhập
+- `addProductPage.jsp` - Thêm sản phẩm
+- `addDiscountPage.jsp` - Thêm mã giảm giá
+- `doSaveProduct.jsp` - Lưu sản phẩm
+- `doSaveDiscount.jsp` - Lưu discount
+- `doSaveReceipt.jsp` - Lưu phiếu nhập
+- `doSearchDiscount.jsp` - Tìm và áp dụng discount
+
+**Statistics** (Manager only):
+- `statisticsPage.jsp` - Chọn loại thống kê
+- `providerStatisticsPage.jsp` - Thống kê theo NCC
+- `expenseStatisticsPage.jsp` - Thống kê chi phí
+- `doGetStatistics.jsp` - Xử lý thống kê
+- `doGetProviderStatistics.jsp` - Xử lý thống kê NCC
+
+---
+
+## ⚙️ **3 CHỨC NĂNG CHÍNH**
+
+### **1. Quản lý thông tin nhà cung cấp** ✅ Hoàn thiện
+- **Phân quyền**: Chỉ Manager
+- **Features**:
+  - ✅ Tìm kiếm NCC (theo tên, địa chỉ, SĐT, email)
+  - ✅ Thêm NCC mới
+  - ✅ Sửa thông tin NCC
+  - ✅ Xóa NCC (cascade delete discounts)
+  - ✅ Validation: kiểm tra email/SĐT trùng
+
+### **2. Nhập trang phục từ nhà cung cấp** ✅ Hoàn thiện
+- **Phân quyền**: Tất cả users
+- **Features**:
+  - ✅ Tạo phiếu nhập mới (Receipt)
+  - ✅ Chọn nhà cung cấp
+  - ✅ Thêm sản phẩm vào phiếu (từ danh sách của NCC)
+  - ✅ Thêm sản phẩm mới chưa có trong DS
+  - ✅ Áp dụng mã giảm giá (ProductDiscount hoặc ReceiptDiscount)
+  - ✅ Tính tổng tiền tự động
+  - ✅ Lưu phiếu nhập vào DB
+  - ✅ Xem danh sách phiếu nhập theo khoảng thời gian
+  - ✅ Xem chi tiết phiếu nhập
+
+### **3. Thống kê** ✅ Hoàn thiện
+- **Phân quyền**: Chỉ Manager
+- **Features**:
+  - ✅ Thống kê theo doanh chi (trong khoảng thời gian)
+  - ✅ Thống kê theo nhà cung cấp
+  - ✅ Hiển thị tổng số NCC, tổng số phiếu, tổng chi phí
+
+---
+
+## 🔐 **HỆ THỐNG SESSION & PHÂN QUYỀN**
+
+**Session Management:**
+```java
+session.setAttribute("staff", staff); // Lưu object Staff
+// Staff chứa: id, username, password, fullName, role
+```
+
+**Phân quyền:**
+- **Manager** (role = "manager"):
+  - ✅ Quản lý thông tin nhà cung cấp
+  - ✅ Nhập trang phục
+  - ✅ Thống kê
+
+- **Staff/ImportStaff** (role = "staff"/"importstaff"):
+  - ❌ Quản lý thông tin nhà cung cấp
+  - ✅ Nhập trang phục
+  - ❌ Thống kê
+
+**Security:**
+- Kiểm tra session timeout tự động
+- Redirect về login.jsp nếu chưa đăng nhập
+- Redirect về homepage.jsp nếu không đủ quyền
+
+---
+
+## 💾 **DATABASE SCHEMA**
+
+**Các bảng chính:**
+```sql
+tblUser (id, username, password, fullName, role)
+tblProvider (id, name, address, phoneNo, email)
+tblProduct (id, name, size, color)
+tblProviderProduct (id, tblProviderId, tblProductId, unitPrice)
+tblReceipt (id, createdDate, tblUserId, tblProviderId, tblDiscountId)
+tblReceiptProduct (id, tblReceiptId, tblProductId, quantity, unitPrice)
+tblDiscount (id, discountCode, amount, tblProviderId)
+tblProductDiscount (id, tblDiscountId, tblProductId)
+tblReceiptDiscount (id, tblDiscountId)
+```
+
+---
+
+## 🎯 **TÌNH TRẠNG HIỆN TẠI**
+
+### ✅ **Đã hoàn thiện 100%:**
+1. ✅ Tất cả Models
+2. ✅ Tất cả DAOs với full CRUD operations
+3. ✅ Authentication & Authorization system
+4. ✅ Module quản lý nhà cung cấp (hoàn chỉnh)
+5. ✅ Module nhập trang phục (hoàn chỉnh với discount system)
+6. ✅ Module thống kê (hoàn chỉnh)
+7. ✅ Session management
+8. ✅ Database integration
+
+### 🎨 **Đặc điểm kỹ thuật nổi bật:**
+- **Transaction management**: Sử dụng commit/rollback cho operations phức tạp
+- **Cascade delete**: Xóa provider tự động xóa discounts liên quan
+- **Dynamic discount system**: Hỗ trợ cả ProductDiscount và ReceiptDiscount
+- **Real-time calculation**: Tự động tính tổng tiền phiếu nhập
+- **Parameter passing**: Sử dụng `from` parameter để quay lại trang trước
+- **Session-based cart**: Receipt được lưu trong session khi tạo phiếu
+
+---
+
+## 📊 **WORKFLOW CHÍNH**
+
+### **Workflow 1: Tạo phiếu nhập**
+1. User vào `productImportPage.jsp`
+2. Click "Tạo phiếu nhập mới" → `createImportReceiptPage.jsp`
+3. Chọn nhà cung cấp (hoặc thêm mới)
+4. Thêm sản phẩm vào phiếu (với số lượng)
+5. Áp dụng mã giảm giá (optional)
+6. Lưu phiếu → `doSaveReceipt.jsp`
+7. Xem chi tiết → `receiptDetailPage.jsp`
+
+### **Workflow 2: Quản lý NCC (Manager only)**
+1. Manager vào `providerManagementPage.jsp`
+2. Tìm kiếm NCC (optional)
+3. Thêm/Sửa/Xóa NCC
+4. Validation tự động kiểm tra trùng lặp
+
+### **Workflow 3: Thống kê (Manager only)**
+1. Manager vào `statisticsPage.jsp`
+2. Chọn khoảng thời gian
+3. Xem thống kê tổng quan hoặc theo NCC
+
+---
+
+## 🎓 **KẾT LUẬN**
+
+Bạn đã xây dựng một **hệ thống quản lý cho thuê trang phục hoàn chỉnh** với:
+- ✅ Architecture MVC chuẩn
+- ✅ Phân quyền chặt chẽ
+- ✅ Full CRUD operations
+- ✅ Transaction management
+- ✅ Discount system linh hoạt
+- ✅ Statistics module
+- ✅ Clean code structure
+
+**Hệ thống đã sẵn sàng để deploy và sử dụng!** 🚀
+
+Bạn có muốn tôi giúp thêm phần nào khác không? (Ví dụ: thêm tính năng mới, tối ưu code, fix bugs, hoặc cải thiện UI?)
+
+---
+
+_**User (2025-11-21 08:52Z)**_
+
+sửa @doSaveProduct.jsp và @addProductPage.jsp sao cho @doSaveProduct.jsp lấy thông tin từ đối tượng provider được truyền từ @addProductPage.jsp thay vì phải gọi hàm getProviderById() từ ProductDAO giống cách @receiptDetailPage.jsp lấy thông tin receipt từ @providerStatisticsPage.jsp 
+
+---
+
+_**Agent (model claude-4.5-sonnet-thinking, mode Agent)**_
+
+<think><details><summary>Thought Process</summary>
+Người dùng muốn tôi sửa 2 file:
+1. `addProductPage.jsp` - cần truyền đối tượng Provider thay vì chỉ truyền providerId
+2. `doSaveProduct.jsp` - cần lấy Provider từ request thay vì gọi `getProviderById()`
+
+Tương tự như cách `receiptDetailPage.jsp` lấy thông tin receipt từ `providerStatisticsPage.jsp` thông qua session/parameter, không phải gọi DAO.
+
+Nhìn vào code hiện tại:
+- `addProductPage.jsp` có danh sách providers, và form submit với providerId
+- `doSaveProduct.jsp` nhận providerId, gọi `providerDAO.getProviderById(providerId)` để lấy Provider object
+
+Cách mới:
+- `addProductPage.jsp` nên lưu Provider object vào session hoặc truyền qua parameter
+- `doSaveProduct.jsp` lấy Provider từ session/parameter
+
+Nhưng vấn đề là: trong form, user chọn provider từ dropdown. Làm sao để truyền object?
+
+Có 2 cách:
+1. Lưu toàn bộ danh sách providers vào session, sau đó trong doSaveProduct.jsp, dựa vào providerId để tìm trong list đó
+2. Khi submit form, lưu provider vào session trước
+
+Cách 1 hợp lý hơn. Tôi sẽ:
+- Trong `addProductPage.jsp`: lưu `providers` vào session
+- Trong `doSaveProduct.jsp`: lấy `providers` từ session, tìm provider theo providerId
+
+
+- Giải pháp này tương tự như cách `receiptDetailPage.jsp` truy xuất receipt từ danh sách trong session</details></think>
+
+---
+
+Dạ, tôi sẽ sửa 2 file để `doSaveProduct.jsp` lấy thông tin Provider từ session thay vì gọi DAO, tương tự cách `receiptDetailPage.jsp` lấy Receipt từ session.
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **code_edit** • Edit file: src/main/webapp/addProductPage.jsp</summary>
+
+**Chunk 1**
+Lines added: 3, lines removed: undefined
+
+```diff
+@@ -22,4 +22,7 @@
+      ProviderDAO providerDAO = new ProviderDAO();
+      List&lt;Provider&gt; providers = providerDAO.getProviderList();
++     
++     // Lưu danh sách providers vào session để doSaveProduct.jsp sử dụng
++     session.setAttribute(&quot;providerList&quot;, providers);
+  %&gt;
+  
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+Tốt, giờ sửa doSaveProduct.jsp để lấy providers từ session và tìm provider theo providerId.</details></think>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **code_edit** • Edit file: src/main/webapp/doSaveProduct.jsp</summary>
+
+**Chunk 1**
+Lines added: 19, lines removed: 2
+
+```diff
+@@ -27,6 +27,23 @@
+          
+          int providerId = Integer.parseInt(providerIdParam);
+-         ProviderDAO providerDAO = new ProviderDAO();
+-         Provider provider = providerDAO.getProviderById(providerId);
++         
++         // Lấy danh sách providers từ session
++         List&lt;Provider&gt; providerList = (List&lt;Provider&gt;) session.getAttribute(&quot;providerList&quot;);
++         if (providerList == null) {
++             throw new Exception(&quot;Không tìm thấy danh sách nhà cung cấp trong session&quot;);
++         }
++         
++         // Tìm provider theo providerId
++         Provider provider = null;
++         for (Provider p : providerList) {
++             if (p.getId() == providerId) {
++                 provider = p;
++                 break;
++             }
++         }
++         
++         if (provider == null) {
++             throw new Exception(&quot;Không tìm thấy nhà cung cấp với ID: &quot; + providerId);
++         }
+          
+          ProviderProduct providerProduct = new ProviderProduct();
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+Hoàn thành! Tôi đã sửa 2 file theo yêu cầu:
+
+1. `addProductPage.jsp`: Lưu danh sách providers vào session
+2. `doSaveProduct.jsp`: Lấy providers từ session và tìm provider theo providerId thay vì gọi DAO
+
+Cách này tương tự như `receiptDetailPage.jsp` lấy receipt từ receiptList trong session.</details></think>
+
+---
+
+Hoàn thành! Tôi đã sửa 2 file theo yêu cầu của bạn:
+
+## ✅ **Thay đổi:**
+
+### 1. **addProductPage.jsp**
+- ✅ Thêm dòng lưu `providerList` vào session sau khi lấy từ DAO
+- Giờ danh sách providers sẽ được lưu trong session để `doSaveProduct.jsp` sử dụng
+
+### 2. **doSaveProduct.jsp**
+- ✅ Xóa dòng gọi `providerDAO.getProviderById(providerId)`
+- ✅ Thay bằng: lấy `providerList` từ session
+- ✅ Tìm provider trong list dựa vào `providerId` (giống cách `receiptDetailPage.jsp` tìm receipt từ `receiptList`)
+- ✅ Thêm exception handling nếu không tìm thấy provider trong session hoặc không tìm thấy provider với ID tương ứng
+
+## 📊 **So sánh:**
+
+**Trước:**
+```java
+ProviderDAO providerDAO = new ProviderDAO();
+Provider provider = providerDAO.getProviderById(providerId);
+```
+
+**Sau:**
+```java
+List<Provider> providerList = (List<Provider>) session.getAttribute("providerList");
+Provider provider = null;
+for (Provider p : providerList) {
+    if (p.getId() == providerId) {
+        provider = p;
+        break;
+    }
+}
+```
+
+Giờ cách hoạt động giống hệt như `receiptDetailPage.jsp` lấy receipt từ `receiptList` trong session, không cần gọi DAO thêm lần nữa! 🎯
+
+---
+
+_**User (2025-11-21 08:52Z)**_
+
+tương tự, sửa @doGetProviderStatistics.jsp và @expenseStatisticsPage.jsp sao cho @doGetProviderStatistics.jsp lấy thông tin từ đối tượng provider được truyền từ @expenseStatisticsPage.jsp 
+
+---
+
+_**Agent (model claude-4.5-sonnet-thinking, mode Agent)**_
+
+<think><details><summary>Thought Process</summary>
+Người dùng muốn tôi sửa 2 file `doGetProviderStatistics.jsp` và `expenseStatisticsPage.jsp` theo cùng pattern như vừa sửa `doSaveProduct.jsp` và `addProductPage.jsp`.
+
+Hiện tại trong `doGetProviderStatistics.jsp`:
+- Nhận `providerId` từ parameter
+- Gọi `providerDAO.getProviderById(providerId)` nếu không có receipt nào
+
+Người dùng muốn:
+- `expenseStatisticsPage.jsp` lưu danh sách providers (từ statList) vào session
+- `doGetProviderStatistics.jsp` lấy provider từ session thay vì gọi DAO
+
+Nhìn vào code:
+1. Trong `expenseStatisticsPage.jsp`, có `statList` chứa `ProviderStat`, mỗi `ProviderStat` có `provider`
+2. Trong `doGetProviderStatistics.jsp`, dòng 62-70 đang lấy provider từ receiptList hoặc gọi DAO
+
+Tôi cần:
+1. Trong `expenseStatisticsPage.jsp`: không cần làm gì thêm vì `statList` đã có sẵn trong session
+2. Trong `doGetProviderStatistics.jsp`: thay vì gọi `providerDAO.getProviderById(providerId)`, lấy từ `statList` trong session</details></think>
+
+---
+
+Dạ, tôi sẽ sửa 2 file để `doGetProviderStatistics.jsp` lấy thông tin Provider từ `statList` trong session thay vì gọi DAO.
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **code_edit** • Edit file: src/main/webapp/doGetProviderStatistics.jsp</summary>
+
+**Chunk 1**
+Lines added: 15, lines removed: 2
+
+```diff
+@@ -66,6 +66,19 @@
+          
+          else {
+-             ProviderDAO providerDAO = new ProviderDAO();
+-             provider = providerDAO.getProviderById(providerId);
++             List&lt;ProviderStatDAO.ProviderStat&gt; statList = (List&lt;ProviderStatDAO.ProviderStat&gt;) session.getAttribute(&quot;statList&quot;);
++             if (statList == null) {
++                 throw new Exception(&quot;Không tìm thấy danh sách thống kê trong session&quot;);
++             }
++             
++             for (ProviderStatDAO.ProviderStat stat : statList) {
++                 if (stat.getProvider().getId() == providerId) {
++                     provider = stat.getProvider();
++                     break;
++                 }
++             }
++             
++             if (provider == null) {
++                 throw new Exception(&quot;Không tìm thấy nhà cung cấp với ID: &quot; + providerId);
++             }
+          }
+          
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+Good! Tôi đã sửa `doGetProviderStatistics.jsp` để:
+1. Khi không có receiptList (hoặc receiptList rỗng), thay vì gọi `providerDAO.getProviderById()`
+2. Lấy `statList` từ session
+3. Duyệt qua `statList` để tìm provider có ID khớp với `providerId`
+4. Throw exception nếu không tìm thấy
+
+File `expenseStatisticsPage.jsp` không cần sửa gì vì `statList` đã được lưu trong session rồi (dòng 23).
+
+Pattern này giống hệt với cách sửa `doSaveProduct.jsp` và `addProductPage.jsp` trước đó.</details></think>
+
+---
+
+Hoàn thành! Tôi đã sửa `doGetProviderStatistics.jsp` theo yêu cầu của bạn.
+
+## ✅ **Thay đổi:**
+
+### **doGetProviderStatistics.jsp**
+- ✅ Xóa dòng gọi `providerDAO.getProviderById(providerId)`
+- ✅ Thay bằng: lấy `statList` từ session (cái đã được lưu từ `expenseStatisticsPage.jsp`)
+- ✅ Tìm provider trong `statList` dựa vào `providerId` bằng cách duyệt qua từng `ProviderStat`
+- ✅ Thêm exception handling nếu không tìm thấy `statList` hoặc không tìm thấy provider
+
+### **expenseStatisticsPage.jsp**
+- Không cần sửa gì vì `statList` đã có sẵn trong session (dòng 23)
+
+## 📊 **So sánh:**
+
+**Trước:**
+```java
+else {
+    ProviderDAO providerDAO = new ProviderDAO();
+    provider = providerDAO.getProviderById(providerId);
+}
+```
+
+**Sau:**
+```java
+else {
+    List<ProviderStatDAO.ProviderStat> statList = (List<ProviderStatDAO.ProviderStat>) session.getAttribute("statList");
+    if (statList == null) {
+        throw new Exception("Không tìm thấy danh sách thống kê trong session");
+    }
+    
+    for (ProviderStatDAO.ProviderStat stat : statList) {
+        if (stat.getProvider().getId() == providerId) {
+            provider = stat.getProvider();
+            break;
+        }
+    }
+    
+    if (provider == null) {
+        throw new Exception("Không tìm thấy nhà cung cấp với ID: " + providerId);
+    }
+}
+```
+
+Giờ cả 2 luồng (doSaveProduct ↔ addProductPage và doGetProviderStatistics ↔ expenseStatisticsPage) đều hoạt động theo cùng pattern: lấy dữ liệu từ session thay vì gọi DAO! 🎯
+
+---
+
