@@ -43,7 +43,7 @@
             <td>Nhà cung cấp</td>
             <td>
                 <select name="providerId" id="providerId" onchange="this.form.action='addDiscountPage.jsp'; this.form.submit();" required>
-                    <option value="">-- Chọn nhà cung cấp --</option>
+                    <option value="">Chọn nhà cung cấp</option>
                     <%
                         for (Provider p : providers) {
                             String selected = (selectedProviderId != null && p.getId() == Integer.parseInt(selectedProviderId)) ? "selected" : "";
@@ -67,7 +67,7 @@
             <td>Mặt hàng</td>
             <td>
                 <select name="productId" id="productId" <%= (selectedProviderId == null || selectedProviderId.isEmpty() ? "disabled" : "") %>>
-                    <option value="">-- Không chọn (áp dụng cho toàn phiếu) --</option>
+                    <option value="">Không chọn (áp dụng cho toàn phiếu)</option>
                     <%
                         for (ProviderProduct pp : providerProducts) {
                     %>

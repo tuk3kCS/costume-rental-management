@@ -25,7 +25,7 @@
 <button onclick="location.href='homepage.jsp'" style="float: right;">Quay lại</button>
 <br><br>
 
-<form name="statisticsForm" action="doGetStatistics.jsp" method="post">
+<form name="statisticsForm" action="doGetExpenseStatistics.jsp" method="post">
     <table border="0">
         <tr>
             <td>Chọn loại thống kê</td>

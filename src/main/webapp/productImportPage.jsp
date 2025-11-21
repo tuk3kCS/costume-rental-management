@@ -19,7 +19,7 @@
 <button onclick="location.href='homepage.jsp'" style="float: right;">Quay lại</button>
 <br><br>
 
-<form name="searchForm" action="doSearchReceipt.jsp" method="post">
+<form name="searchForm" method="post">
     <input type="text" name="keyword" id="keyword" size="50" />
     <input type="submit" value="Tìm kiếm" />
 </form>
