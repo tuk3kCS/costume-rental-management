@@ -36,7 +36,7 @@
             <td>Nhà cung cấp</td>
             <td>
                 <select name="providerId" id="providerId" required>
-                    <option value="">-- Chọn nhà cung cấp --</option>
+                    <option value="">Chọn nhà cung cấp</option>
                     <%
                         for (Provider p : providers) {
                     %>

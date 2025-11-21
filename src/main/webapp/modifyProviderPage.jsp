@@ -46,6 +46,24 @@
         response.sendRedirect("providerManagementPage.jsp");
         return;
     }
+    
+    String duplicateField = (String) session.getAttribute("duplicateField");
+    session.removeAttribute("duplicateField");
+    
+    String tempName = (String) session.getAttribute("tempProviderName");
+    String tempAddress = (String) session.getAttribute("tempProviderAddress");
+    String tempPhoneNo = (String) session.getAttribute("tempProviderPhoneNo");
+    String tempEmail = (String) session.getAttribute("tempProviderEmail");
+    
+    session.removeAttribute("tempProviderName");
+    session.removeAttribute("tempProviderAddress");
+    session.removeAttribute("tempProviderPhoneNo");
+    session.removeAttribute("tempProviderEmail");
+    
+    String displayName = (tempName != null) ? tempName : provider.getName();
+    String displayAddress = (tempAddress != null) ? tempAddress : provider.getAddress();
+    String displayPhoneNo = (tempPhoneNo != null) ? tempPhoneNo : provider.getPhoneNo();
+    String displayEmail = (tempEmail != null) ? tempEmail : provider.getEmail();
 %>
 
 <h2>Chỉnh sửa nhà cung cấp</h2>
@@ -57,19 +75,19 @@
     <table border="0">
         <tr>
             <td>Tên nhà cung cấp</td>
-            <td><input type="text" name="name" id="name" value="<%= provider.getName() %>" required /></td>
+            <td><input type="text" name="name" id="name" value="<%= displayName %>" required /></td>
         </tr>
         <tr>
             <td>Địa chỉ</td>
-            <td><input type="text" name="address" id="address" value="<%= provider.getAddress() %>" required /></td>
+            <td><input type="text" name="address" id="address" value="<%= displayAddress %>" required /></td>
         </tr>
         <tr>
             <td>Email</td>
-            <td><input type="email" name="email" id="email" value="<%= provider.getEmail() %>" required /></td>
+            <td><input type="email" name="email" id="email" value="<%= displayEmail %>" required /></td>
         </tr>
         <tr>
             <td>Số điện thoại</td>
-            <td><input type="text" name="phoneNo" id="phoneNo" value="<%= provider.getPhoneNo() %>" required /></td>
+            <td><input type="text" name="phoneNo" id="phoneNo" value="<%= displayPhoneNo %>" required /></td>
         </tr>
         <tr>
             <td></td>
@@ -80,6 +98,34 @@
         </tr>
     </table>
 </form>
+
+<%
+    if (duplicateField != null && !duplicateField.isEmpty()) {
+%>
+<script type="text/javascript">
+    window.onload = function() {
+        var duplicateFields = '<%= duplicateField %>'.split(',');
+        
+        for (var i = 0; i < duplicateFields.length; i++) {
+            var field = document.getElementById(duplicateFields[i]);
+            if (field) {
+                field.style.border = '2px solid red';
+                field.style.backgroundColor = '#ffe6e6';
+            }
+        }
+        
+        if (duplicateFields.length > 0) {
+            var firstField = document.getElementById(duplicateFields[0]);
+            if (firstField) {
+                firstField.focus();
+                firstField.select();
+            }
+        }
+    }
+</script>
+<%
+    }
+%>
 
 </body>
 </html>

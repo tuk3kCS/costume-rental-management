@@ -23,11 +23,13 @@
     String tempAddress = (String) session.getAttribute("tempProviderAddress");
     String tempPhoneNo = (String) session.getAttribute("tempProviderPhoneNo");
     String tempEmail = (String) session.getAttribute("tempProviderEmail");
+    String duplicateField = (String) session.getAttribute("duplicateField");
     
     session.removeAttribute("tempProviderName");
     session.removeAttribute("tempProviderAddress");
     session.removeAttribute("tempProviderPhoneNo");
     session.removeAttribute("tempProviderEmail");
+    session.removeAttribute("duplicateField");
     
     if (tempName == null) tempName = "";
     if (tempAddress == null) tempAddress = "";
@@ -67,6 +69,34 @@
         </tr>
     </table>
 </form>
+
+<%
+    if (duplicateField != null && !duplicateField.isEmpty()) {
+%>
+<script type="text/javascript">
+    window.onload = function() {
+        var duplicateFields = '<%= duplicateField %>'.split(',');
+        
+        for (var i = 0; i < duplicateFields.length; i++) {
+            var field = document.getElementById(duplicateFields[i]);
+            if (field) {
+                field.style.border = '2px solid red';
+                field.style.backgroundColor = '#ffe6e6';
+            }
+        }
+        
+        if (duplicateFields.length > 0) {
+            var firstField = document.getElementById(duplicateFields[0]);
+            if (firstField) {
+                firstField.focus();
+                firstField.select();
+            }
+        }
+    }
+</script>
+<%
+    }
+%>
 
 </body>
 </html>

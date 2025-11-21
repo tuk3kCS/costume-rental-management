@@ -39,9 +39,29 @@
         Provider existingProvider = dao.checkProvider(provider);
         
         if (existingProvider != null) {
+            String duplicateField = "";
+            boolean emailDuplicate = existingProvider.getEmail().equals(email);
+            boolean phoneNoDuplicate = existingProvider.getPhoneNo().equals(phoneNo);
+            
+            if (emailDuplicate && phoneNoDuplicate) {
+                duplicateField = "email,phoneNo";
+            }
+            
+            else if (emailDuplicate) {
+                duplicateField = "email";
+            }
+            
+            else if (phoneNoDuplicate) {
+                duplicateField = "phoneNo";
+            }
+            
             String redirectUrl;
             if (provider.getId() > 0) {
-                request.setAttribute("provider_" + provider.getId(), provider);
+                session.setAttribute("tempProviderName", name);
+                session.setAttribute("tempProviderAddress", address);
+                session.setAttribute("tempProviderPhoneNo", phoneNo);
+                session.setAttribute("tempProviderEmail", email);
+                session.setAttribute("duplicateField", duplicateField);
                 redirectUrl = "modifyProviderPage.jsp?id=" + provider.getId();
             }
             
@@ -50,11 +70,25 @@
                 session.setAttribute("tempProviderAddress", address);
                 session.setAttribute("tempProviderPhoneNo", phoneNo);
                 session.setAttribute("tempProviderEmail", email);
+                session.setAttribute("duplicateField", duplicateField);
                 redirectUrl = "addProviderPage.jsp?from=" + from;
+            }
+            
+            String alertMessage = "";
+            if (emailDuplicate && phoneNoDuplicate) {
+                alertMessage = "Email và số điện thoại đã tồn tại trên hệ thống!";
+            }
+            
+            else if (emailDuplicate) {
+                alertMessage = "Email đã tồn tại trên hệ thống!";
+            }
+            
+            else if (phoneNoDuplicate) {
+                alertMessage = "Số điện thoại đã tồn tại trên hệ thống!";
             }
 %>
 <script type="text/javascript">
-    alert('Email hoặc số điện thoại đã tồn tại trên hệ thống!');
+    alert('<%= alertMessage %>');
     window.location.href='<%= redirectUrl %>';
 </script>
 <%
@@ -81,7 +115,10 @@
             else {
                 String redirectUrl;
                 if (provider.getId() > 0) {
-                    request.setAttribute("provider_" + provider.getId(), provider);
+                    session.setAttribute("tempProviderName", name);
+                    session.setAttribute("tempProviderAddress", address);
+                    session.setAttribute("tempProviderPhoneNo", phoneNo);
+                    session.setAttribute("tempProviderEmail", email);
                     redirectUrl = "modifyProviderPage.jsp?id=" + provider.getId();
                 }
                 
