@@ -50,50 +50,68 @@ public class ProductDAO extends DAO {
         try {
             con.setAutoCommit(false);
             
-            String sqlProduct = "INSERT INTO tblProduct (name, size, color) VALUES (?, ?, ?)";
-            PreparedStatement pstmtProduct = con.prepareStatement(sqlProduct, Statement.RETURN_GENERATED_KEYS);
-            pstmtProduct.setString(1, providerProduct.getProduct().getName());
-            pstmtProduct.setString(2, providerProduct.getProduct().getSize());
-            pstmtProduct.setString(3, providerProduct.getProduct().getColor());
-            int result = pstmtProduct.executeUpdate();
+            int productId = -1;
             
-            if (result > 0) {
-                ResultSet rs = pstmtProduct.getGeneratedKeys();
-                int productId = 0;
-                if (rs.next()) {
-                    productId = rs.getInt(1);
-                }
-                
-                String sqlProviderProduct = "INSERT INTO tblProviderProduct (tblProductId, tblProviderId, unitPrice) VALUES (?, ?, ?)";
-                PreparedStatement pstmtProviderProduct = con.prepareStatement(sqlProviderProduct);
-                pstmtProviderProduct.setInt(1, productId);
-                pstmtProviderProduct.setInt(2, providerProduct.getProvider().getId());
-                pstmtProviderProduct.setInt(3, providerProduct.getUnitPrice());
-                pstmtProviderProduct.executeUpdate();
-                
-                con.commit();
-                con.setAutoCommit(true);
-                return true;
+            String sqlCheckProduct = "SELECT id FROM tblProduct WHERE name = ? AND size = ? AND color = ?";
+            PreparedStatement pstmtCheckProduct = con.prepareStatement(sqlCheckProduct);
+            pstmtCheckProduct.setString(1, providerProduct.getProduct().getName());
+            pstmtCheckProduct.setString(2, providerProduct.getProduct().getSize());
+            pstmtCheckProduct.setString(3, providerProduct.getProduct().getColor());
+            ResultSet rsProduct = pstmtCheckProduct.executeQuery();
+            
+            if (rsProduct.next()) {
+                productId = rsProduct.getInt("id");
             }
             
-            con.rollback();
-            con.setAutoCommit(true);
-            return false;
+            else {
+                String sqlInsertProduct = "INSERT INTO tblProduct (name, size, color) VALUES (?, ?, ?)";
+                PreparedStatement pstmtInsertProduct = con.prepareStatement(sqlInsertProduct, Statement.RETURN_GENERATED_KEYS);
+                pstmtInsertProduct.setString(1, providerProduct.getProduct().getName());
+                pstmtInsertProduct.setString(2, providerProduct.getProduct().getSize());
+                pstmtInsertProduct.setString(3, providerProduct.getProduct().getColor());
+                pstmtInsertProduct.executeUpdate();
+                
+                ResultSet rsInserted = pstmtInsertProduct.getGeneratedKeys();
+                if (rsInserted.next()) {
+                    productId = rsInserted.getInt(1);
+                }
+                
+                else {
+                    con.rollback();
+                    con.setAutoCommit(true);
+                    return false;
+                }
+            }
             
-        } catch (Exception e) {
+            String sqlCheckProviderProduct = "SELECT id FROM tblProviderProduct WHERE tblProductId = ? AND tblProviderId = ?";
+            PreparedStatement pstmtCheckProviderProduct = con.prepareStatement(sqlCheckProviderProduct);
+            pstmtCheckProviderProduct.setInt(1, productId);
+            pstmtCheckProviderProduct.setInt(2, providerProduct.getProvider().getId());
+            ResultSet rsProviderProduct = pstmtCheckProviderProduct.executeQuery();
+            
+            if (rsProviderProduct.next()) {
+                con.rollback();
+                con.setAutoCommit(true);
+                return false;
+            }
+            
+            String sqlInsertProviderProduct = "INSERT INTO tblProviderProduct (tblProductId, tblProviderId, unitPrice) VALUES (?, ?, ?)";
+            PreparedStatement pstmtInsertProviderProduct = con.prepareStatement(sqlInsertProviderProduct);
+            pstmtInsertProviderProduct.setInt(1, productId);
+            pstmtInsertProviderProduct.setInt(2, providerProduct.getProvider().getId());
+            pstmtInsertProviderProduct.setInt(3, providerProduct.getUnitPrice());
+            pstmtInsertProviderProduct.executeUpdate();
+            
+            con.commit();
+            con.setAutoCommit(true);
+            return true;
+            
+        }
+        
+        catch (Exception e) {
             con.rollback();
             con.setAutoCommit(true);
             throw e;
         }
-    }
-
-    public boolean checkProduct(Product product) throws Exception {
-        String sql = "SELECT * FROM tblProduct WHERE name = ? AND size = ? AND color = ?";
-        PreparedStatement pstmt = con.prepareStatement(sql);
-        pstmt.setString(1, product.getName());
-        pstmt.setString(2, product.getSize());
-        pstmt.setString(3, product.getColor());
-        ResultSet rs = pstmt.executeQuery();
-        return rs.next();
     }
 }

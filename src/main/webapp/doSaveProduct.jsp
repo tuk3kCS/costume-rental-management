@@ -64,7 +64,7 @@
         else {
 %>
 <script type="text/javascript">
-    alert('Lưu thất bại!');
+    alert('Sản phẩm đã tồn tại trên hệ thống!');
     window.location.href='addProductPage.jsp?from=<%= from %>';
 </script>
 <%
