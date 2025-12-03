@@ -32,7 +32,7 @@ Chức năng:
 
 - Thiết lập file ```src\main\java\dao\DAO.java``` như sau:
 
-    ```bash
+    ```java
     String dbUrl = "jdbc:mysql://localhost:3306/costume_rental_management?autoReconnect=true&useSSL=false";
 	String dbClass = "com.mysql.jdbc.Driver";
     con = DriverManager.getConnection (dbUrl, "root", "<mật khẩu MySQL đã thiết lập>");
