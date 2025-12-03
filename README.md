@@ -11,7 +11,7 @@ Chức năng:
 ### Yêu cầu
 
 - IDE bất kì, dự án này sẽ sử dụng Eclipse.
-- (Apache Tomcat 9.0.112)[https://tomcat.apache.org/download-90.cgi]
+- [Apache Tomcat 9.0.112](https://tomcat.apache.org/download-90.cgi)
 - MySQL 8.0 (Server, Router và Workbench)
 - MySQL Connector (```mysql-connector-java-8.0.30.jar```)
 
