@@ -26,6 +26,7 @@ Chức năng:
 2. **Thiết lập cơ sở dữ liệu**
 
 - Tạo connection mới trong Workbench với tên ```costume-rental-management```, cổng 3306.
+- Tạo database và các schema mới bằng file ```database_export.sql```.
 
 3. **Thiết lập kết nối tới cơ sở dữ liệu**
 
