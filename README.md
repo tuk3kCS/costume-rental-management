@@ -39,5 +39,5 @@ Chức năng:
 
 4. **Khởi chạy ứng dụng**
 
-- Cấu hình Tomcat Server trong IDE.
+- Cấu hình Tomcat Server trong IDE và thêm ```mysql-connector-java-8.0.30.jar``` vào thư viện.
 - Khởi chạy file ```src\main\java\webapp\login.jsp```.
