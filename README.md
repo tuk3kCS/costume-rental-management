@@ -1,6 +1,6 @@
 # Giới thiệu
 
-Bài tập lớn môn Phân tích và Thiết kế Hệ thống thông tin (INT1342_CLC), HVCNBCVT.
+Bài tập lớn môn Phân tích và Thiết kế Hệ thống thông tin (INT1342_CLC), HVCNBCVT về hệ thống quản lý cho thuê trang phục.
 Chức năng:
 - Quản lý thông tin nhà cung cấp
 - Nhập trang phục về từ nhà cung cấp
